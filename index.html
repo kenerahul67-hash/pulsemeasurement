@@ -1,0 +1,1586 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PulseMeasurement | See what's happening in your organisation before it's too late</title>
+  <meta
+    name="description"
+    content="PulseMeasurement reads continuous signals from your teams — flagging attrition risk, hidden blockers, strategy drift, and emerging leaders before leaders find out the hard way."
+  />
+  <style>
+    :root {
+      --ink: #13211f;
+      --muted: #334742;
+      --navy: #0f1e3c;
+      --teal: #0d9488;
+      --sky: #0ea5e9;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --violet: #8b5cf6;
+      --paper: #f7f9f7;
+      --line: #d7e2dc;
+      --soft: #eef5f2;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "DM Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(247, 249, 247, 0.95);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+    .nav {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 800; color: var(--navy); }
+    .mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--teal);
+      color: white;
+      font-weight: 800;
+    }
+    .links { display: flex; gap: 22px; color: var(--muted); font-size: 14px; font-weight: 700; }
+    .links a:hover { color: var(--teal); }
+    .actions { display: flex; gap: 10px; align-items: center; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 18px;
+      border-radius: 8px;
+      border: 1px solid #9fb4ad;
+      font-size: 14px;
+      font-weight: 800;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .button.primary { background: var(--navy); border-color: var(--navy); color: white; }
+    .button.teal { background: var(--teal); border-color: var(--teal); color: white; }
+    .button:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(15,30,60,0.12); }
+
+    section { border-bottom: 1px solid var(--line); }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(13, 148, 136, 0.18), transparent 28%),
+        radial-gradient(circle at 78% 10%, rgba(245, 158, 11, 0.16), transparent 22%),
+        linear-gradient(120deg, rgba(14, 165, 233, 0.10), transparent 42%);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      padding: 32px 24px;
+      width: 100%;
+    }
+    .eyebrow {
+      display: inline-flex;
+      border: 1px solid #a9c9c3;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 999px;
+      padding: 8px 14px;
+      color: #0d6e65;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 { margin: 0; line-height: 1.18; letter-spacing: 0; }
+    h1 { margin-top: 24px; font-size: clamp(38px, 5.5vw, 68px); max-width: 780px; }
+    h2 { font-size: clamp(28px, 3.8vw, 42px); }
+    h3 { font-size: 20px; line-height: 1.3; }
+    .lead { margin-top: 20px; max-width: 680px; color: var(--muted); font-size: 16px; line-height: 1.75; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+
+    .screen {
+      min-height: 420px;
+      border-radius: 12px;
+      border: 1px solid #c7d7d1;
+      background: #101f25;
+      padding: 16px;
+      color: white;
+      box-shadow: 0 24px 60px rgba(15, 30, 60, 0.25);
+    }
+    .screen-inner {
+      height: 100%;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      background: #0d171b;
+      padding: 18px;
+    }
+    .screen-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      padding-bottom: 14px;
+    }
+    .live { background: rgba(255,255,255,0.1); color: #bdf5ee; border-radius: 6px; padding: 4px 8px; font-family: monospace; font-size: 12px; }
+    .metrics { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 14px; margin-top: 18px; }
+    .metric { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); border-radius: 8px; padding: 14px; }
+    .bar { height: 8px; background: rgba(255,255,255,0.12); border-radius: 999px; overflow: hidden; margin-top: 12px; }
+    .bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--teal), var(--sky), var(--amber)); }
+    .briefing { border: 1px solid rgba(255,255,255,0.12); background: #071114; border-radius: 8px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; }
+    .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 40px; text-align: center; }
+
+    .block { padding: 72px 0; }
+    .section-copy { max-width: 760px; color: var(--muted); margin-top: 16px; line-height: 1.75; }
+
+    /* Fluid responsive grids using auto-fit */
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 32px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 32px; }
+    .grid-5 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-top: 32px; }
+
+    /* Standardised card base */
+    .card {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 12px;
+      padding: 22px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15, 30, 60, 0.08); }
+    a.card:hover { border-color: var(--teal); }
+
+    .soft-card {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      border-radius: 12px;
+      padding: 22px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .soft-card:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(15,30,60,0.06); }
+
+    .stripe { display: block; height: 12px; border-radius: 999px; margin-bottom: 18px; }
+    .small { color: var(--muted); font-size: 14px; line-height: 1.7; }
+    .small p + p { margin-top: 12px; }
+    .tag { display: inline-flex; padding: 4px 8px; border-radius: 6px; background: #e7f6f3; color: #0b5e56; font: 700 12px/1 monospace; }
+    .question { margin-top: 12px; color: var(--ink); font-size: 19px; font-weight: 800; line-height: 1.3; }
+    .subtle { margin-top: 8px; color: #0b5e56; font-size: 14px; font-weight: 800; }
+
+    .triangle .card { transition: transform 0.18s ease, box-shadow 0.18s ease; }
+    .triangle .card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(15, 30, 60, 0.12); }
+
+    .dark { background: #0f1e3c; color: white; }
+    .dark .section-copy, .dark .small { color: rgba(255,255,255,0.72); }
+    .dark .card { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); color: white; }
+
+    /* Modal fade transition */
+    .pm3-modal-wrap {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .pm3-modal-wrap.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .pm3-modal {
+      transform: translateY(16px);
+      transition: transform 0.2s ease;
+    }
+    .pm3-modal-wrap.open .pm3-modal {
+      transform: translateY(0);
+    }
+
+    /* Sticky first column for comparison table */
+    .dim-table td.td-label,
+    .dim-table th:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+    }
+
+    .form {
+      margin-top: 32px;
+      border: 1px solid #c7d7d1;
+      border-radius: 12px;
+      background: var(--paper);
+      padding: 20px;
+    }
+    .form-inner { background: white; border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+    .fields { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 18px; }
+    label { display: grid; gap: 8px; color: #24413b; font-size: 14px; font-weight: 800; }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #c7d7d1;
+      border-radius: 8px;
+      padding: 12px;
+      color: var(--ink);
+      font: inherit;
+      background: white;
+      transition: border-color 0.15s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(13,148,136,0.1);
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    .span-2 { grid-column: span 2; }
+
+    @media (max-width: 900px) {
+      .hero-grid, .metrics { grid-template-columns: 1fr; }
+      .links { display: none; }
+      .hero-grid { padding: 56px 24px; }
+      h1 { font-size: 40px; }
+      .fields { grid-template-columns: 1fr; }
+      .span-2 { grid-column: auto; }
+      /* Product explorer stack on mobile */
+      .pm3-body { grid-template-columns: 1fr !important; }
+      .pm3-stages { overflow-x: auto; display: flex; flex-direction: row; max-height: none; }
+      .pm3-stage { flex-shrink: 0; min-width: 140px; }
+      /* Richness table scroll on mobile */
+      .dim-table { font-size: 12px; }
+    }
+
+    @media (max-width: 600px) {
+      .block { padding: 48px 0; }
+      h2 { font-size: 26px; }
+      .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
+    }
+
+    /* BETA BANNER */
+    .beta-banner {
+      background: repeating-linear-gradient(-45deg,#0f1e3c,#0f1e3c 10px,#0d1829 10px,#0d1829 20px);
+      color: rgba(255,255,255,0.75);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-align: center;
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(13,148,136,0.3);
+    }
+    .beta-banner .beta-pill {
+      background: var(--teal);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .beta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(13,148,136,0.12);
+      border: 1px solid rgba(13,148,136,0.35);
+      color: var(--teal);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 999px;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="beta-banner" role="banner">
+    <span class="beta-pill">Beta</span>
+    <span>This is a pre-release version of the PulseMeasurement website — content and design are being actively refined.</span>
+  </div>
+  <header class="topbar">
+    <div class="wrap nav">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <a class="brand" href="#home"><span class="mark">PM</span><span>PulseMeasurement</span><span class="beta-badge">β Beta</span></a>
+        <span style="font-size:11px;color:var(--muted);font-style:italic;padding-left:4px;">We tell you what is growing before it blooms — and what is breaking before it fails.</span>
+      </div>
+      <nav class="links" aria-label="Website sections">
+        <a href="#functionality">Functionality</a>
+        <a href="#technology">Technology</a>
+        <a href="#use-cases">Use Cases</a>
+        <a href="#value-proposition">Value</a>
+        <a href="#richness">Richness</a>
+        <a href="rich-information-at-scale.html">Resources</a>
+        <a href="#demo">Demo</a>
+      </nav>
+      <div class="actions"><a class="button primary" href="#demo">Book demo</a></div>
+    </div>
+  </header>
+
+  <section id="home" class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">For leaders who tend, not just manage</span>
+        <p style="font-size:1.15rem;line-height:1.45;font-weight:600;color:var(--ink);max-width:780px;margin-bottom:14px;margin-top:12px;">We tell you what is growing before it blooms — and what is breaking before it fails.</p>
+        <p class="lead" style="font-size:0.82rem;line-height:1.6;margin-bottom:8px;">PulseMeasurement is a platform that allows team members to present the best version of themselves to their team and organisation — through a simple AI-supported conversation.</p>
+        <p class="lead" style="font-size:0.82rem;line-height:1.6;margin-top:8px;margin-bottom:8px;">That conversation is placed in the context of the team member's role, their goals, and the strategic imperatives of the organisation. The result is a continuous harvest of intelligence about how the organisation is actually functioning — its sentiment, its capacity, its alignment, and its risks.</p>
+        <p class="lead" style="font-size:0.82rem;line-height:1.6;margin-top:8px;margin-bottom:8px;">These signals are aggregated across individuals, teams, and the organisation — creating a coherent picture of how the organisation is actually executing against its intentions.</p>
+        <p class="lead" style="font-size:0.82rem;line-height:1.6;margin-top:8px;margin-bottom:8px;">This aggregated intelligence is synthesised into a set of measures that allow leaders to track the current execution health of their organisation — in real time, not retrospect.</p>
+        <p class="lead" style="font-size:0.82rem;line-height:1.6;margin-top:8px;margin-bottom:8px;">Every signal that is acted on closes a loop — back to the person who raised it. That loop is how trust is built. Over time, the system surfaces what the organisation knows but has never formally captured — the knowledge pockets that exist in three people's heads, the heroes no one has noticed, the emerging leaders carrying more than their title suggests, the institutional memory that would otherwise leave when people do.</p>
+        <div class="cta-row">
+          <a class="button teal" href="#demo">Book a tailored demo</a>
+          <a class="button" href="#functionality">Explore functionality</a>
+        </div>
+      </div>
+
+      <div class="screen">
+        <div class="screen-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:32px 28px;height:100%;">
+          <div style="width:32px;height:3px;background:#1D9E75;margin-bottom:20px;border-radius:2px;"></div>
+          <p style="font-size:1.05rem;line-height:1.72;font-weight:400;color:rgba(255,255,255,.9);margin:0 0 20px 0;">Employees rarely stay silent because they have nothing to say. They stay silent because no credible mechanism exists for saying it — and because experience has taught them that nothing will happen when they do.</p>
+          <p style="font-size:1.05rem;line-height:1.72;font-weight:400;color:rgba(255,255,255,.72);margin:0 0 20px 0;">Most people intelligence tools respond to this with culture: speak-up programmes, psychological safety workshops, values campaigns. These ask for trust without providing a structural reason to give it.</p>
+          <p style="font-size:1.05rem;line-height:1.72;font-weight:500;color:#8de3d8;margin:0;">PulseMeasurement is not a cultural campaign asking people to be brave. It is a formal procedure that makes honesty structurally safe — with an owner, a timeline, a case record, and a closed loop back to the person who raised it.</p>
+          <div style="width:32px;height:3px;background:#1D9E75;margin-top:20px;border-radius:2px;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block triangle">
+    <div class="wrap">
+      <span class="eyebrow">Motivation vs procedure</span>
+      <h2 style="margin-top:20px;">Most people intelligence tools ask employees to speak up. PulseMeasurement gives them a mechanism that works.</h2>
+      <p class="section-copy">
+        The organisations that struggle most with people intelligence are rarely short of honesty from their employees. They are short of a credible mechanism through which honesty is structurally safe to give. When no formal path exists from concern to action — when the loop never closes back to the person who raised something — the rational response is silence. Not apathy. Rational self-protection.
+      </p>
+      <p class="section-copy" style="margin-top:16px;">PulseMeasurement is not a speak-up initiative. It does not ask employees to be braver, more transparent, or more psychologically safe. It gives them a procedure — a formal, structured, logged mechanism with an owner, a timeline, and a guaranteed return. The signal that arrives is honest because the architecture makes honesty safe. Not because we asked for it.</p>
+      <div class="grid-3">
+        <a class="card" href="#functionality"><span class="stripe" style="background:var(--teal);"></span><strong>What it does day to day</strong><h3 style="margin-top:8px;">The product</h3><p class="small">Most tools give you data. PulseMeasurement gives you a picture — and then suggests what to do about it.<br><br>Once a week, every team member answers a single question. That answer passes through six engines: signal capture, spectral scoring, manager briefing, remediation, alignment, and archive. By the time it reaches a leader, a raw work update has become something considerably more useful — a pattern, a risk, an opportunity, or a suggested prompt to act.<br><br>The picture builds quietly in the background. The manager gets a briefing that suggests what to notice, what to ask, and what to do next. The leader sees whether strategy is reaching the floor or quietly stalling. HR sees whether the organisation is following through on what it sees — or filing good intentions under action taken.<br><br>It is, in short, the difference between knowing your organisation and believing you do.</p></a>
+        <a class="card" href="#technology"><span class="stripe" style="background:var(--sky);"></span><strong>Why you can trust it</strong><h3 style="margin-top:8px;">How it works</h3><p class="small">Trust in a system that watches your people is not given. It is earned — slowly, by design, and through transparency about what the system does and does not do.<br><br>PulseMeasurement is built around four commitments. The signal is offered, not extracted — an employee chooses what to share. The AI suggests, it does not decide — every interpretation comes with a reasoning path and a confidence score, and a human being makes the call. The record is complete — what was seen, what was done, and where nothing happened when something should have. And the boundaries between what an employee sees, a manager sees, and a leader sees are responsibility driven and architectural — not cosmetic.<br><br>These are not features. They are the conditions under which an organisation can trust a system with its most sensitive asset — the truth about how its people are doing.</p></a>
+        <a class="card" href="#use-cases"><span class="stripe" style="background:var(--amber);"></span><strong>The problems it solves</strong><h3 style="margin-top:8px;">Use cases</h3><p class="small">Every organisation has the same conversation at some point — usually in a boardroom, sometimes in a courtroom. The question is always the same, even when it isn't asked out loud: what did they know, and when did they come to know it?<br><br>A leader who can answer that question with evidence is in a fundamentally different position than one who cannot — not just morally, but legally, professionally, and in the eyes of every person in the organisation who needed to be heard.<br><br>The most catastrophic organisational failures did not happen because the information didn't exist. They happened because nobody built a system designed to surface it.<br><br>PulseMeasurement is that system — not to catch fraud, but to catch the quieter failures that every organisation mistakes for normal when it confuses silence with health.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="functionality" class="block">
+    <div class="wrap">
+      <span class="eyebrow">The palette</span>
+      <h2 style="margin-top:20px;">Six engines. Six colours. One complete picture.</h2>
+      <p class="section-copy">PulseMeasurement is not one system doing one thing. It is six distinct capabilities — each with its own purpose, its own colour, and its own place in the picture. Like a painter's palette, each colour is purposeless alone. Together they produce something no single instrument could.</p>
+
+      <div style="margin-top:36px;display:flex;flex-direction:column;gap:0;border:0.5px solid rgba(0,0,0,0.09);border-radius:12px;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);">
+          <div style="padding:20px 16px;border-right:0.5px solid rgba(0,0,0,0.09);border-top:4px solid var(--teal)">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:8px;">Signal Capture</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.3">Work as it happens</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6">The weekly question, shaped by an AI conversation coach. The dot harvested before it can be connected.</div>
+          </div>
+          <div style="padding:20px 16px;border-right:0.5px solid rgba(0,0,0,0.09);border-top:4px solid var(--sky)">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--sky);margin-bottom:8px;">Spectral Scoring</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.3">What the signals mean</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6">Sixteen dimensions. Confidence levels. Reasoning paths. The dot examined before it is interpreted.</div>
+          </div>
+          <div style="padding:20px 16px;border-right:0.5px solid rgba(0,0,0,0.09);border-top:4px solid var(--amber)">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:8px;">Manager Briefing</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.3">A story, not a dashboard</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6">A plain-language narrative the manager can act on. The dot connected into something worth reading.</div>
+          </div>
+          <div style="padding:20px 16px;border-right:0.5px solid rgba(0,0,0,0.09);border-top:4px solid var(--red)">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--red);margin-bottom:8px;">Remediation</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.3">Problems that get fixed</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6">Cases, action plans, owners, timelines, and the record of what happened. The dot that became an intervention.</div>
+          </div>
+          <div style="padding:20px 16px;border-right:0.5px solid rgba(0,0,0,0.09);border-top:4px solid #2e9e5a">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#2e9e5a;margin-bottom:8px;">Alignment</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.3">Strategy that lands</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6">Goals, OKRs, directives, and evidence of whether strategy reached the work. The dot that proves the orchestra changed its tune.</div>
+          </div>
+          <div style="padding:20px 16px;border-top:4px solid var(--violet)">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--violet);margin-bottom:8px;">Archive</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.3">The lesson that remains</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6">Resolved cases, outcomes, and institutional memory. The dot that became the lesson the next person inherits.</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);">
+          <div style="height:6px;background:var(--teal);opacity:.2"></div>
+          <div style="height:6px;background:var(--sky);opacity:.2"></div>
+          <div style="height:6px;background:var(--amber);opacity:.2"></div>
+          <div style="height:6px;background:var(--red);opacity:.2"></div>
+          <div style="height:6px;background:#2e9e5a;opacity:.2"></div>
+          <div style="height:6px;background:var(--violet);opacity:.2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="block dark">
+    <div class="wrap">
+      <span class="eyebrow" style="background:rgba(255,255,255,.08);color:#8de3d8;border-color:rgba(255,255,255,.18);">One signal. Five things a leader needs to know.</span>
+      <h2 style="margin-top:20px;">A single post from your team contains more than most managers will ever notice.</h2>
+      <p class="section-copy">Most tools treat a work update as a unit of activity. PulseMeasurement treats it as evidence — of capacity, risk, alignment, blockers, and unmet need — all in the same sentence.</p>
+      <div class="card" style="margin-top:28px;border-left:3px solid var(--teal);font-style:italic;color:rgba(255,255,255,0.85);"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:10px;">Employee post · Engineering team · Today</span>We are still on track for the customer launch, but the integration review slipped again. I can cover the extra testing tonight, though I need help from someone who knows the billing edge cases.</div>
+      <div class="grid-5">
+        <div class="card"><span class="stripe" style="background:var(--teal);"></span><h3>Capacity</h3><p class="small">Sustained effort with rising pressure. This person is absorbing more than their role requires. 78% confidence.</p></div>
+        <div class="card"><span class="stripe" style="background:var(--sky);"></span><h3>Blocker</h3><p class="small">A dependency on another team is unresolved. Nobody has acted on it yet. 84% confidence.</p></div>
+        <div class="card"><span class="stripe" style="background:var(--amber);"></span><h3>Alignment</h3><p class="small">Work still maps to the launch goal. The commitment is intact even under pressure. 66% confidence.</p></div>
+        <div class="card"><span class="stripe" style="background:var(--red);"></span><h3>Risk</h3><p class="small">A late-night recovery pattern is repeating. Left unaddressed, this becomes a retention signal. 71% confidence.</p></div>
+        <div class="card"><span class="stripe" style="background:var(--violet);"></span><h3>Support needed</h3><p class="small">An explicit ask for help has gone unanswered. This is the easiest intervention on this list. 73% confidence.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="product-explorer" class="block">
+    <div class="wrap">
+      <span class="eyebrow">This is what we do and how we do it</span>
+      <h2 style="margin-top:20px;">Every surface has a purpose. Every action leaves a record.</h2>
+      <p class="section-copy">A single post becomes five signals. Those signals travel through three levels — post, group, and organisation — before they become intelligence a leader can act on. Every stage has a purpose. Every action leaves a record.</p>
+      <p class="section-copy" style="margin-top:12px;">Every signal travels through three levels before it becomes intelligence. At the post level it is scored and labelled. At the group level it becomes a pattern. At the organisational level it becomes a picture of how you are executing against your intentions. Click any stage to see what happens there — and which use cases it supports.</p>
+
+      <div style="margin-top:32px;border:0.5px solid rgba(0,0,0,0.1);border-radius:12px;overflow:hidden;font-family:inherit;">
+        <style>
+        .pm3-tabs{display:flex;border-bottom:0.5px solid rgba(0,0,0,0.08)}
+        .pm3-tab{flex:1;padding:14px 12px;cursor:pointer;background:#f8f9fa;border-right:0.5px solid rgba(0,0,0,0.08);transition:all .15s;text-align:center;border-top:3px solid transparent}
+        .pm3-tab:last-child{border-right:none}
+        .pm3-tab.pm3-active{background:#fff}
+        .pm3-tab-num{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#999;margin-bottom:3px}
+        .pm3-tab-label{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:1px}
+        .pm3-tab-sub{font-size:11px;color:#999}
+        .pm3-body{display:grid;grid-template-columns:220px 1fr;min-height:520px}
+        .pm3-stages{border-right:0.5px solid rgba(0,0,0,0.08);background:#f8f9fa;overflow-y:auto}
+        .pm3-stage-header{padding:12px 14px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#999;border-bottom:0.5px solid rgba(0,0,0,0.08);position:sticky;top:0;background:#f8f9fa;z-index:1}
+        .pm3-stage{padding:11px 14px;cursor:pointer;border-left:3px solid transparent;border-bottom:0.5px solid rgba(0,0,0,0.06);transition:all .12s;background:#f8f9fa}
+        .pm3-stage:hover{background:#fff}
+        .pm3-stage.pm3-active{background:#fff}
+        .pm3-stage-label{font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
+        .pm3-stage-sub{font-size:10px;color:#aaa}
+        .pm3-right{display:flex;flex-direction:column;overflow:hidden}
+        .pm3-detail{padding:20px 22px;border-bottom:0.5px solid rgba(0,0,0,0.08);background:#fff;flex-shrink:0}
+        .pm3-eye{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+        .pm3-title{font-size:15px;font-weight:600;color:#1a1a1a;line-height:1.35;margin-bottom:8px}
+        .pm3-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+        .pm3-chip{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600}
+        .pm3-desc{font-size:12px;color:#555;line-height:1.7;margin-bottom:10px}
+        .pm3-insight{padding:10px 13px;border-radius:6px;border-left:3px solid;font-size:12px;line-height:1.6;font-style:italic}
+        .pm3-ucs{padding:16px 20px;overflow-y:auto;flex:1;background:#fff}
+        .pm3-uc-header{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#aaa;margin-bottom:10px;padding-bottom:8px;border-bottom:0.5px solid rgba(0,0,0,0.08)}
+        .pm3-uc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+        .pm3-uc-card{padding:10px 12px;background:#f8f9fa;border-radius:6px;border:0.5px solid rgba(0,0,0,0.08);cursor:pointer;transition:all .12s}
+        .pm3-uc-card:hover{background:#fff;border-color:rgba(0,0,0,0.15);transform:translateY(-1px)}
+        .pm3-uc-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle;flex-shrink:0}
+        .pm3-uc-name{font-size:11px;font-weight:600;color:#1a1a1a;margin-bottom:3px;line-height:1.3}
+        .pm3-uc-q{font-size:10px;font-style:italic;color:#aaa;line-height:1.35}
+        .pm3-modal-wrap{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1000;align-items:center;justify-content:center;padding:24px;display:flex;opacity:0;pointer-events:none;transition:opacity .2s ease}
+        .pm3-modal-wrap.open{opacity:1;pointer-events:all}
+        .pm3-modal{background:#fff;border-radius:12px;width:100%;max-width:640px;max-height:80vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,0.18);transform:translateY(16px);transition:transform .2s ease}
+        .pm3-modal-wrap.open .pm3-modal{transform:translateY(0)}
+        .pm3-modal-header{padding:20px 24px 16px;border-bottom:0.5px solid rgba(0,0,0,0.08);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;position:sticky;top:0;background:#fff;z-index:1}
+        .pm3-modal-title{font-size:16px;font-weight:600;color:#1a1a1a;line-height:1.3}
+        .pm3-modal-close{width:28px;height:28px;border-radius:50%;border:0.5px solid rgba(0,0,0,0.12);background:#f8f9fa;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:#666;flex-shrink:0;line-height:1}
+        .pm3-modal-close:hover{background:#f0f0f0}
+        .pm3-modal-body{padding:20px 24px}
+        .pm3-modal-section{margin-bottom:20px}
+        .pm3-modal-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#aaa;margin-bottom:8px}
+        .pm3-modal-text{font-size:13px;color:#444;line-height:1.7}
+        .pm3-modal-starter{padding:14px 16px;background:#f8f9fa;border-radius:8px;border-left:3px solid;font-size:13px;font-style:italic;color:#333;line-height:1.6}
+        .pm3-buyer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+        .pm3-buyer-card{padding:10px 12px;background:#f8f9fa;border-radius:6px;border:0.5px solid rgba(0,0,0,0.08)}
+        .pm3-buyer-role{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+        .pm3-buyer-pain{font-size:11px;color:#555;line-height:1.5}
+        </style>
+
+        <div class="pm3-tabs" id="pm3-tabs"></div>
+        <div class="pm3-body">
+          <div class="pm3-stages">
+            <div class="pm3-stage-header">Signal journey</div>
+            <div id="pm3-stage-list"></div>
+          </div>
+          <div class="pm3-right">
+            <div class="pm3-detail">
+              <div class="pm3-eye" id="pm3-eye"></div>
+              <div class="pm3-title" id="pm3-title"></div>
+              <div class="pm3-chips" id="pm3-chips"></div>
+              <div class="pm3-desc" id="pm3-desc"></div>
+              <div class="pm3-insight" id="pm3-insight"></div>
+            </div>
+            <div class="pm3-ucs">
+              <div class="pm3-uc-header" id="pm3-uc-header">Use cases at this stage</div>
+              <div class="pm3-uc-grid" id="pm3-uc-grid"></div>
+            </div>
+          </div>
+        </div>
+
+        <script>
+        (function(){
+          var L=[
+            {num:'Level 1',label:'Post level',sub:'Single signal journey',color:'#1D9E75',stages:[
+              {label:'Employee writes',sub:'Signal origin',color:'#1D9E75',bg:'#E1F5EE',chips:[{l:'Signal origin',c:'#E1F5EE',tc:'#0F6E56'}],desc:'Once a week the employee answers: what would you like your colleagues and managers to know about your contribution last week? The AI conversation coach helps them find the words — not to direct the answer, but to help them say what they mean.',insight:'The signal that arrives is offered, not extracted. That distinction is the whole answer to the surveillance question.',ucs:[{c:'#1D9E75',n:'Cadence compliance',q:'Is the team sharing honestly and consistently?'},{c:'#1D9E75',n:'Signal quality for small teams',q:'How do we keep analytics honest when the group is small?'}]},
+              {label:'16D spectral scoring',sub:'Scoring engine',color:'#378ADD',bg:'#E6F1FB',chips:[{l:'Scoring engine',c:'#E6F1FB',tc:'#185FA5'}],desc:'The post passes through the spectral scoring engine. Sixteen dimensions are evaluated — capacity, alignment, risk, momentum, blockers, support needs. Each receives a score and a confidence level.',insight:'A score without a confidence level is not intelligence. It is just a number. PulseMeasurement shows its working at every stage.',ucs:[{c:'#E24B4A',n:'Surface hidden blockers',q:'What is slowing teams down that nobody has told you?'},{c:'#7F77DD',n:'Culture measurement',q:'What does the pattern of signals tell you about culture?'}]},
+              {label:'Signal bands separated',sub:'Spectral split',color:'#7F77DD',bg:'#EEEDFE',chips:[{l:'Five bands',c:'#EEEDFE',tc:'#3C3489'}],desc:'Like white light through a prism, the post separates into distinct signal bands — each labelled, scored, and ready for the briefing engine. Capacity. Alignment. Risk. Blocker. Support needed.',insight:'A post rarely means one thing. The original is always preserved alongside the scoring so the manager can see what the system saw and why.',ucs:[{c:'#E24B4A',n:'Proactive remediation',q:'Can we act before the signal becomes a crisis?'},{c:'#7F77DD',n:'Human in the loop',q:'How does the manager stay in control of AI-surfaced intelligence?'}]},
+              {label:'Feed — village responds',sub:'Engagement engine',color:'#1D9E75',bg:'#E1F5EE',chips:[{l:'Engagement engine',c:'#E1F5EE',tc:'#0F6E56'}],desc:'The post appears in the shared team feed. Colleagues can offer help, recognition, or amplification — publicly, in the same feed the whole team uses.',insight:'It takes a village to raise a contributing team member. Leadership that responds publicly creates culture. Leadership that responds privately creates whispers.',ucs:[{c:'#1D9E75',n:'Replace status meetings',q:'Can the feed replace the weekly status meeting?'},{c:'#1D9E75',n:'Feed as operational surface',q:'Can leaders act directly from what they read in the feed?'},{c:'#1D9E75',n:'Directive acknowledgement',q:'Can you show who saw and responded to each directive?'}]},
+            ]},
+            {num:'Level 2',label:'Group level',sub:'Patterns across multiple posts',color:'#BA7517',stages:[
+              {label:'Manager briefing',sub:'Group intelligence',color:'#BA7517',bg:'#FAEEDA',chips:[{l:'Group briefing',c:'#FAEEDA',tc:'#854F0B'},{l:'AI narrative',c:'#FAEEDA',tc:'#854F0B'}],desc:'Signals from the week are synthesised into the group briefing — a plain-language narrative telling the manager what to notice, what to ask, and where to look. Not a dashboard. A briefing.',insight:'The briefing arrives before the one-on-one, not after the damage. The manager still leads. They just no longer have to lead blind.',ucs:[{c:'#BA7517',n:'Manager intelligence briefings',q:'Do your managers know what is happening in their teams?'},{c:'#BA7517',n:'New manager inheritance',q:'What does a new manager need from day one?'},{c:'#BA7517',n:'AI-assisted manager responses',q:'How does the manager act on what they see?'},{c:'#BA7517',n:'Management at scale',q:'How do you maintain quality when managers span large teams?'}]},
+              {label:'Predictions engine',sub:'Risk pattern detection',color:'#E24B4A',bg:'#FCEBEB',chips:[{l:'Predictions',c:'#FCEBEB',tc:'#A32D2D'},{l:'Pattern detection',c:'#FCEBEB',tc:'#A32D2D'}],desc:'The predictions engine evaluates whether signals — across multiple posts over time — cross a threshold that warrants action. Attrition risk. Burnout. Hidden blockers. Strategy drift.',insight:'A single update is a data point. A month of them is a portrait. A quarter of them is something a good manager would have given a great deal to have known sooner.',ucs:[{c:'#E24B4A',n:'Detecting friction before attrition',q:'Do you know who is drifting before they resign?'},{c:'#E24B4A',n:'Burnout & capacity monitoring',q:'Who is absorbing more than their role requires?'},{c:'#378ADD',n:'Emerging leader identification',q:'Who is leading before they have the title?'},{c:'#378ADD',n:'Unrecognised high performers',q:'Who is carrying more than their title suggests?'},{c:'#378ADD',n:'Knowledge champions',q:'Who does the organisation learn from?'},{c:'#378ADD',n:'Teams ready for stretch',q:'Which teams have capacity for a bigger challenge?'},{c:'#BA7517',n:'Strategy execution champions',q:'Who is actually moving the strategy forward?'}]},
+              {label:'Case & action plan',sub:'Remediation workflow',color:'#E24B4A',bg:'#FCEBEB',chips:[{l:'Remediation case',c:'#FCEBEB',tc:'#A32D2D'},{l:'Action plan',c:'#FCEBEB',tc:'#A32D2D'}],desc:'When a pattern crosses a threshold, a case is opened. An AI-suggested action plan is generated. An owner is assigned. A timeline is set. The manager reviews and decides.',insight:'Every step is logged. If the case was opened and nothing happened, the record shows that too. The silence in an audit trail is often the most important entry in it.',ucs:[{c:'#E24B4A',n:'SLA compliance tracking',q:'Are open cases being resolved within policy timelines?'},{c:'#E24B4A',n:'Leader accountability & appraisal',q:'Can you separate leader behaviour from team context?'},{c:'#7F77DD',n:'Human in the loop intelligence',q:'How does the manager stay in control of AI-surfaced actions?'}]},
+            ]},
+            {num:'Level 3',label:'Organisational level',sub:'Months of signals across groups',color:'#7F77DD',stages:[
+              {label:'Strategy & alignment',sub:'Organisational intelligence',color:'#BA7517',bg:'#FAEEDA',chips:[{l:'Alignment layer',c:'#FAEEDA',tc:'#854F0B'},{l:'Leadership surface',c:'#FAEEDA',tc:'#854F0B'}],desc:'Goal linking connects individual posts to strategic priorities. Over time, the distance between what was announced and what actually changed becomes visible — not just at team level but across the whole organisation.',insight:'Strategy is not what was announced. It is whether it moved the needle. This is the surface that answers that question.',ucs:[{c:'#BA7517',n:'Strategy cascade measurement',q:'Did your last strategic priority change anything at team level?'},{c:'#BA7517',n:'Goal health & OKR integrity',q:'Are your OKRs being worked on or just logged?'},{c:'#BA7517',n:'OKR cascade integrity',q:'Are goals linked all the way down to team activity?'},{c:'#1D9E75',n:'Continuous signal vs annual survey',q:'Why is real-time signal better than survey data?'}]},
+              {label:'Leadership & board',sub:'Executive intelligence',color:'#7F77DD',bg:'#EEEDFE',chips:[{l:'Leadership briefing',c:'#EEEDFE',tc:'#3C3489'},{l:'Board surface',c:'#EEEDFE',tc:'#3C3489'}],desc:'Leadership surfaces aggregate signal intelligence across all groups and all time — giving boards, CHROs, and CEOs a live view of org health, risk, momentum, and opportunity.',insight:'A board that only hears good news is not being led. It is being managed. PulseMeasurement gives the board something worth thinking about.',ucs:[{c:'#7F77DD',n:'Board org health dashboard',q:'Can you show the board people risk before it becomes a headline?'},{c:'#7F77DD',n:'Automated HR narrative',q:'Can the system generate the people story without manual assembly?'},{c:'#7F77DD',n:'Post-merger integration tracking',q:'How do you monitor culture and signal health during M&A?'},{c:'#7F77DD',n:'Small team leadership analytics',q:'Do you have intelligence about how your leadership team functions?'}]},
+              {label:'Archive & learning',sub:'Institutional memory',color:'#639922',bg:'#EAF3DE',chips:[{l:'Archive',c:'#EAF3DE',tc:'#3B6D11'},{l:'Learning loop',c:'#EAF3DE',tc:'#3B6D11'}],desc:'Resolved cases, archived signals, and repeated solutions become the organisation\'s memory — searchable, reusable, and owned by the team. The next manager inherits the wisdom of the last one.',insight:'Most organisations are remarkably good at solving the same problem twice. PulseMeasurement is designed to make that unnecessary.',ucs:[{c:'#639922',n:'Do you know what you know?',q:'Does the organisation remember what worked?'},{c:'#639922',n:'The organisation that learns',q:'How does the organisation build on what it has resolved?'},{c:'#639922',n:'Archive & longitudinal history',q:'What does the full signal history of a team reveal?'},{c:'#E24B4A',n:'Audit trail',q:'Can you show what was known and what was done?'}]},
+              {label:'Employee reflection',sub:'Individual surface',color:'#1D9E75',bg:'#E1F5EE',chips:[{l:'Monthly reflection',c:'#E1F5EE',tc:'#0F6E56'},{l:'Employee surface',c:'#E1F5EE',tc:'#0F6E56'}],desc:'Once a month, the employee receives a private narrative of their own contribution — written by the system, belonging entirely to them. The fair exchange for sharing honestly every week.',insight:'The monthly reflection is the longer view — a private mirror of the year so far, in their own words, shaped for them alone.',ucs:[{c:'#1D9E75',n:'Employee value proposition',q:'What does the employee get in return for sharing honestly?'}]},
+            ]},
+          ];
+
+          var al=0,as=0;
+
+          function buildTabs(){
+            var tabs=document.getElementById('pm3-tabs');
+            L.forEach(function(l,i){
+              var t=document.createElement('div');
+              t.className='pm3-tab'+(i===0?' pm3-active':'');
+              t.style.borderTopColor=i===0?l.color:'transparent';
+              t.innerHTML='<div class="pm3-tab-num" style="color:'+(i===0?l.color:'#999')+'">'+l.num+'</div><div class="pm3-tab-label">'+l.label+'</div><div class="pm3-tab-sub">'+l.sub+'</div>';
+              t.addEventListener('click',function(){selLevel(i);});
+              tabs.appendChild(t);
+            });
+          }
+
+          function selLevel(li){
+            al=li;as=0;
+            document.querySelectorAll('.pm3-tab').forEach(function(t,i){
+              t.classList.toggle('pm3-active',i===li);
+              t.style.borderTopColor=i===li?L[li].color:'transparent';
+              t.querySelector('.pm3-tab-num').style.color=i===li?L[li].color:'#999';
+            });
+            buildStages();
+            selStage(0);
+          }
+
+          function buildStages(){
+            var list=document.getElementById('pm3-stage-list');
+            list.innerHTML='';
+            L[al].stages.forEach(function(s,i){
+              var item=document.createElement('div');
+              item.className='pm3-stage'+(i===0?' pm3-active':'');
+              item.style.borderLeftColor=i===0?s.color:'transparent';
+              item.dataset.i=i;
+              item.innerHTML='<div class="pm3-stage-label">'+s.label+'</div><div class="pm3-stage-sub">'+s.sub+'</div>';
+              item.addEventListener('click',function(){selStage(i);});
+              list.appendChild(item);
+            });
+          }
+
+          function selStage(si){
+            as=si;
+            document.querySelectorAll('.pm3-stage').forEach(function(el,j){
+              el.classList.toggle('pm3-active',j===si);
+              el.style.borderLeftColor=j===si?L[al].stages[si].color:'transparent';
+            });
+            var s=L[al].stages[si];
+            var l=L[al];
+            document.getElementById('pm3-eye').textContent=l.num+' — '+l.label+' · '+s.sub;
+            document.getElementById('pm3-eye').style.color=s.color;
+            document.getElementById('pm3-title').textContent=s.label;
+            document.getElementById('pm3-chips').innerHTML=s.chips.map(function(c){return '<span class="pm3-chip" style="background:'+c.c+';color:'+c.tc+'">'+c.l+'</span>';}).join('');
+            document.getElementById('pm3-desc').textContent=s.desc;
+            var ins=document.getElementById('pm3-insight');
+            ins.textContent=s.insight;
+            ins.style.background=s.bg;
+            ins.style.borderLeftColor=s.color;
+            ins.style.color=s.color;
+            document.getElementById('pm3-uc-header').textContent='Use cases — '+l.label+' · '+s.label;
+            var grid=document.getElementById('pm3-uc-grid');
+            grid.innerHTML=s.ucs.map(function(u,ui){return '<div class="pm3-uc-card" data-ucname="'+encodeURIComponent(u.n)+'" data-uccol="'+u.c+'"><div class="pm3-uc-name"><span class="pm3-uc-dot" style="background:'+u.c+'"></span>'+u.n+'</div><div class="pm3-uc-q">'+u.q+'</div></div>';}).join('');
+            grid.querySelectorAll('.pm3-uc-card').forEach(function(card){
+              card.addEventListener('click',function(){
+                var name=decodeURIComponent(card.dataset.ucname);
+                var col=card.dataset.uccol;
+                var u=UC[name];
+                if(!u){
+                  document.getElementById('pm3-modal-title').textContent=name;
+                  document.getElementById('pm3-modal-title').style.color=col;
+                  document.getElementById('pm3-situation').textContent='Full detail for this use case is available in the PulseMeasurement use case library.';
+                  document.getElementById('pm3-buyer-grid').innerHTML='';
+                  document.getElementById('pm3-starter-text').textContent='Contact us to explore this use case in your demo.';
+                  document.getElementById('pm3-starter-text').style.borderLeftColor=col;
+                } else {
+                  document.getElementById('pm3-modal-title').textContent=name;
+                  document.getElementById('pm3-modal-title').style.color=u.color||col;
+                  document.getElementById('pm3-situation').textContent=u.situation;
+                  document.getElementById('pm3-buyer-grid').innerHTML=u.buyers.map(function(b){return '<div class="pm3-buyer-card"><div class="pm3-buyer-role" style="color:'+(u.color||col)+'">'+b.role+'</div><div class="pm3-buyer-pain">'+b.pain+'</div></div>';}).join('');
+                  document.getElementById('pm3-starter-text').textContent=u.starter;
+                  document.getElementById('pm3-starter-text').style.borderLeftColor=u.color||col;
+                }
+                document.getElementById('pm3-modal-wrap').classList.add('open');
+                document.body.style.overflow='hidden';
+              });
+            });
+          }
+
+          buildTabs();
+          buildStages();
+          selStage(0);
+
+          var UC = {
+            'Cadence compliance':{color:'#1D9E75',situation:'The organisation has launched PulseMeasurement but participation is uneven. Some teams share honestly every week. Others submit minimal updates or skip entirely. The signal pool is thin in the teams that need it most.',buyers:[{role:'CHRO',pain:'"We invested in this system and half our managers are flying as blind as before because their teams aren\'t using it."'},{role:'Manager',pain:'"I want to give my team the briefing they deserve but I can\'t if people aren\'t contributing."'},{role:'CEO',pain:'"Adoption is the leading indicator of value. If cadence compliance is low, the ROI never materialises."'}],starter:'"Which of your managers currently has a full signal picture of their team — and which are still guessing?"'},
+            'Signal quality for small teams':{color:'#1D9E75',situation:'A senior leadership team of six people wants to use PulseMeasurement. But with only six signals a week, the scoring engine can\'t produce statistically reliable confidence levels. The system risks either refusing to score or producing misleading certainty.',buyers:[{role:'CHRO',pain:'"The leadership team is the team I most need intelligence about — and the smallest one I have."'},{role:'CEO',pain:'"If the tool can\'t work for my direct reports, I\'m not sure I trust it for anyone."'},{role:'Manager',pain:'"I need this to work for my team regardless of how many people are in it."'}],starter:'"Your leadership team is also a team. Do you currently have any intelligence about how that group is actually functioning?"'},
+            'Surface hidden blockers':{color:'#E24B4A',situation:'A cross-functional project is running three weeks behind. In the retrospective, three people mention they\'d flagged a process blocker two months ago in their updates. No one had connected it. The blocker sat in posts, unread, while the project slipped.',buyers:[{role:'Manager',pain:'"I read every update but I can\'t synthesise patterns across 15 people\'s posts. Something always slips through."'},{role:'CEO',pain:'"We\'re losing execution velocity to problems that existed in the system — people knew about them and the information just didn\'t travel."'},{role:'CHRO',pain:'"Blockers that go unresolved become frustration, and frustration becomes attrition. It\'s all connected."'}],starter:'"In your last project post-mortem, how many of the issues raised had already been written down somewhere — and just never surfaced to the right person?"'},
+            'Culture measurement':{color:'#7F77DD',situation:'The CEO announced a cultural transformation programme 18 months ago. Engagement scores are up slightly. But nobody can show whether the day-to-day experience of working here has actually changed — or whether the scores reflect genuine shift or survey fatigue.',buyers:[{role:'CHRO',pain:'"We\'ve spent a lot on this programme. I need to show the board it\'s working — not just that people say it\'s working."'},{role:'CEO',pain:'"I can feel something is different. But I can\'t prove it and I can\'t direct it because I don\'t know where the change is actually happening."'},{role:'Manager',pain:'"My team tells me things are better. But I don\'t know if that\'s real or just what they think I want to hear."'}],starter:'"If you had to prove to the board that your culture programme has changed how people actually work — not just how they score on a survey — what evidence would you use?"'},
+            'Proactive remediation':{color:'#E24B4A',situation:'A manager receives a briefing showing a team member\'s signals have declined across three consecutive weeks. The predictions engine has flagged an attrition risk at medium confidence. The manager has a choice: act now on imperfect information, or wait for certainty that may never come.',buyers:[{role:'Manager',pain:'"I don\'t want to have a difficult conversation based on something that might be wrong. But I also don\'t want to wait until it\'s too late."'},{role:'CHRO',pain:'"The window to intervene is always shorter than people think. By the time a manager feels confident enough to act, the person has often already decided."'},{role:'CEO',pain:'"Proactive is always cheaper than reactive. I\'d rather have ten conversations that turned out to be unnecessary than one resignation we could have prevented."'}],starter:'"Of your last five unexpected resignations — how many had signals you could see in hindsight?"'},
+            'Human in the loop':{color:'#7F77DD',situation:'The AI flags a team member as a high attrition risk. The manager who reads the briefing knows that person just had a baby and their signals are temporarily low for personal reasons unrelated to work. The system is right about the pattern and wrong about the cause.',buyers:[{role:'Manager',pain:'"The system gave me a number. But I\'m the one who knows the context. I need to be the one who decides what to do with it."'},{role:'CHRO',pain:'"If AI makes decisions about people without human judgment, we\'re exposed — legally, ethically, and in terms of trust."'},{role:'CEO',pain:'"I will not have a system that acts on my employees without a human being making the call. That\'s non-negotiable."'}],starter:'"When the AI surfaces a recommendation about a person — who in your organisation should make the final call, and how does your current system support that?"'},
+            'Replace status meetings':{color:'#1D9E75',situation:'A manager runs a weekly 45-minute team status meeting. Seven people attend. The same four people talk. The information shared could have been written in five minutes each. The remaining time is spent listening to updates that don\'t require anyone else\'s presence.',buyers:[{role:'Manager',pain:'"My team spends four hours a week in a meeting that costs more than it produces. But if I cancel it, I lose my only window into what\'s happening."'},{role:'CEO',pain:'"Meeting overload is the single biggest productivity killer we have. But every meeting exists because someone doesn\'t trust that the information will travel without it."'},{role:'CHRO',pain:'"Meetings are where our best people feel most disrespected. Their time is being consumed by a system built for a world before asynchronous communication existed."'}],starter:'"How many hours a week does your team spend in status meetings — and what percentage of that time produces decisions that couldn\'t have been made from a written update?"'},
+            'Feed as operational surface':{color:'#1D9E75',situation:'A director wants to act on something they read in a team update — a blocker that needs a decision. Currently they have to leave the feed, send an email, schedule a meeting, and follow up manually. By the time the response arrives the context has shifted.',buyers:[{role:'Manager',pain:'"I see the problem. I want to do something about it immediately. But the tool that showed me the problem isn\'t connected to the tools I use to respond."'},{role:'CEO',pain:'"Speed of response is a competitive advantage. If it takes three steps to act on what I\'ve just read, I\'ve already lost time I didn\'t need to lose."'},{role:'CHRO',pain:'"The gap between seeing and acting is where good intentions go to die."'}],starter:'"When a leader reads something in a team update that needs immediate action — how many steps does it currently take to turn that into a formal response?"'},
+            'Directive acknowledgement':{color:'#1D9E75',situation:'The CEO sent a company-wide directive about a new data security policy. Three weeks later, a compliance audit asks which employees have acknowledged the directive and what they said in response. Nobody can answer with certainty.',buyers:[{role:'CEO',pain:'"I sent the directive. I don\'t know who read it, who understood it, or who changed their behaviour because of it."'},{role:'CHRO',pain:'"In a regulated environment, \'we sent an email\' is not compliance. I need a timestamped record of who acknowledged what and when."'},{role:'Manager',pain:'"My team tells me they\'re aware of the policy. But if I\'m asked to prove it, I have nothing."'}],starter:'"For regulated communications — can you demonstrate with a timestamped trail exactly who acknowledged each directive and what they said?"'},
+            'Manager intelligence briefings':{color:'#BA7517',situation:'A manager has twelve direct reports across two time zones. They do a weekly one-to-one with each person but the quality of those conversations depends entirely on memory and instinct. They have no aggregated view of how the team is doing between conversations.',buyers:[{role:'Manager',pain:'"I\'m managing on vibes. I know something\'s off with one person but I can\'t articulate it and I don\'t want to be wrong."'},{role:'CHRO',pain:'"Our managers are the frontline of people management and most of them are flying completely blind."'},{role:'CEO',pain:'"Manager quality is the single biggest driver of team performance and we have no way to systematically improve it."'}],starter:'"If you asked your managers today what\'s the biggest risk in their team — how many would give you a confident, data-backed answer?"'},
+            'New manager inheritance':{color:'#BA7517',situation:'A team leader resigns after three years. Their replacement joins from outside. On day one, the new manager has a team of nine people, a handover document written in haste, and no institutional memory of what has happened, what was tried, and who needs what.',buyers:[{role:'Manager',pain:'"I walked into a situation I didn\'t understand and spent three months making avoidable mistakes because nobody told me what I needed to know."'},{role:'CHRO',pain:'"Every manager transition is a people risk event. The first 90 days determine whether we retain or lose the team."'},{role:'CEO',pain:'"We promote people into management and then abandon them. The cost of that abandonment shows up six months later in attrition we didn\'t predict."'}],starter:'"What does a new manager in your organisation receive on day one to understand the state of their team?"'},
+            'AI-assisted manager responses':{color:'#BA7517',situation:'A manager reads a briefing showing a team member is struggling with capacity and showing early signs of disengagement. They want to respond. But they don\'t know what to say, when to say it, or whether their instinct about the approach is right.',buyers:[{role:'Manager',pain:'"I know I should say something. I just don\'t know how to say it in a way that helps rather than makes things worse."'},{role:'CHRO',pain:'"Manager capability is uneven. Some managers are brilliant at this. Most need a framework. Right now they get nothing."'},{role:'CEO',pain:'"The quality of manager conversations is the difference between keeping people and losing them. We can\'t leave that to chance."'}],starter:'"How do you currently support managers when they\'re dealing with a sensitive team situation in the moment?"'},
+            'Management at scale':{color:'#BA7517',situation:'The organisation has grown from 80 to 400 people in 18 months. The founder-managers who knew everyone personally have been replaced by a layer of managers who were promoted because they were good at their jobs, not because they were trained for people leadership.',buyers:[{role:'CEO',pain:'"We scaled the business but not the management capability. The cracks are showing."'},{role:'CHRO',pain:'"I can\'t train 40 new managers fast enough. I need a system that makes them better than they\'d otherwise be while we build capability."'},{role:'Manager',pain:'"I\'m managing people I haven\'t met in person. I need something that helps me understand what\'s happening in a team I can\'t see."'}],starter:'"At what point in your growth did management quality become a bottleneck — and what did you do about it?"'},
+            'Detecting friction before attrition':{color:'#E24B4A',situation:'A high-performing team has been quietly struggling for three months. Workloads shifted after a reorg, a key manager left, and two senior contributors are disengaged. The CHRO finds out when two resignation letters land on the same Friday afternoon.',buyers:[{role:'CHRO',pain:'"By the time I see it in the data it\'s already too late to act. We lose the person and spend £30–50K replacing them."'},{role:'Manager',pain:'"I could see something was off but I didn\'t know what to do about it. I had no data to back me up."'},{role:'CEO',pain:'"We can\'t afford to lose senior contributors right now. The cost isn\'t just the salary — it\'s the project slip and the team morale hit."'}],starter:'"When did you last find out about a resignation that genuinely surprised you — and how much notice did you have?"'},
+            'Burnout & capacity monitoring':{color:'#E24B4A',situation:'The engineering team just shipped a major product release. Three months of sustained pressure, late nights, compressed sprints. On the surface everything looks fine — velocity is high, the manager is happy. But wellbeing signals have been declining for six weeks.',buyers:[{role:'CHRO',pain:'"We always find out about burnout after the person goes off sick or resigns. We need earlier signals."'},{role:'Manager',pain:'"I don\'t want to be the manager who burned out their team. But I genuinely don\'t know how close to the edge people are."'},{role:'CEO',pain:'"Burnout is a business risk. We\'ve had two key engineers go off sick this year and it cost us a quarter of project timeline."'}],starter:'"After your last major product launch — how did you know which teams needed recovery time and which were genuinely fine?"'},
+            'Emerging leader identification':{color:'#378ADD',situation:'The organisation has a succession planning gap. Three senior roles need to be filled internally within 18 months. HR has produced a list of candidates based on performance reviews and manager nominations. Three people on the list are the most visible, not necessarily the most capable.',buyers:[{role:'CHRO',pain:'"Internal promotions fail when we promote the most visible person rather than the most capable one. I need a more objective basis."'},{role:'CEO',pain:'"I need to know who my next generation of leaders are before my competitors do."'},{role:'Manager',pain:'"I have someone on my team who I think is exceptional. But they\'re quiet. They\'ll never get noticed through the normal process."'}],starter:'"In your last internal promotion cycle — how confident are you that you identified the best candidates, rather than the most visible ones?"'},
+            'Unrecognised high performers':{color:'#378ADD',situation:'A team member who has been quietly delivering exceptional work for 18 months hands in their notice. Their manager is devastated. Their skip-level had no idea who they were. They are leaving because they felt invisible.',buyers:[{role:'CHRO',pain:'"We lose our best quiet performers because the system rewards people who are loud, not people who are good."'},{role:'Manager',pain:'"I knew how good they were. I just didn\'t have a way to make that visible to anyone above me."'},{role:'CEO',pain:'"Every time this happens it costs us £40K and six months of lost momentum. And it\'s entirely preventable."'}],starter:'"Right now, who in your organisation is doing exceptional work that nobody has formally recognised in the last 90 days?"'},
+            'Knowledge champions':{color:'#378ADD',situation:'Three of the organisation\'s most knowledgeable people are planning to leave in the next six months. Nobody knows who they are. The knowledge that will leave with them — about systems, clients, processes, and history — exists nowhere else.',buyers:[{role:'CHRO',pain:'"Key person departure risk is real and we have no systematic way to identify it before it becomes critical."'},{role:'CEO',pain:'"The most expensive thing that walks out of our organisation doesn\'t show up on a balance sheet."'},{role:'Manager',pain:'"When my best person left, we spent four months rebuilding knowledge that should have been documented. It cost us a client."'}],starter:'"If your three most knowledgeable people handed in notice today — how much of what they know exists anywhere outside their heads?"'},
+            'Teams ready for stretch':{color:'#378ADD',situation:'The organisation has a major new initiative to assign. The CEO wants to give it to the team most likely to execute it well. But there is no systematic way to assess which teams have the capacity, cohesion, and momentum to take on additional responsibility.',buyers:[{role:'CEO',pain:'"I\'m assigning major initiatives based on gut feel and relationship. I know that\'s not good enough."'},{role:'CHRO',pain:'"Stretch assignments are talent development opportunities. We\'re wasting them by giving them to the obvious team rather than the right team."'},{role:'Manager',pain:'"My team is ready for more. But there\'s no way for anyone above me to know that."'}],starter:'"If you could see which three teams are genuinely executing at their best right now — what would that change about how you assign your next major initiative?"'},
+            'Strategy execution champions':{color:'#BA7517',situation:'Six months into a major strategic initiative, the CEO asks which teams are genuinely driving the strategy forward and which are nominally aligned. Nobody can answer with evidence. The strategy review produces narratives, not data.',buyers:[{role:'CEO',pain:'"I can see the strategy in the slide deck. I can\'t see it in the work."'},{role:'CHRO',pain:'"Strategy execution is a people problem. But we have no people data that tells us who is executing and who isn\'t."'},{role:'Manager',pain:'"My team is doing the work. But there\'s no way for leadership to know that without asking me, and asking me is not the same as evidence."'}],starter:'"If you could see which three teams are genuinely executing your strategy and which three are nominally aligned — what would that change?"'},
+            'SLA compliance tracking':{color:'#E24B4A',situation:'HR has a policy that all formal employee concerns must receive an initial response within 48 hours and be resolved within 30 days. A compliance audit reveals that 40% of cases in the last year breached at least one of these timelines. Nobody noticed.',buyers:[{role:'CHRO',pain:'"I can\'t manage what I can\'t see. Cases are falling through the cracks and I\'m finding out in an audit."'},{role:'CEO',pain:'"SLA breaches on people concerns are a legal exposure. This is exactly the kind of thing that ends up in a tribunal."'},{role:'Manager',pain:'"I have cases open that I\'ve lost track of. I need something that tells me what I still owe and when it\'s due."'}],starter:'"How many open employee concerns do you have right now, and who owns each one?"'},
+            'Leader accountability & appraisal':{color:'#E24B4A',situation:'A manager\'s team has underperformed for two consecutive quarters. Their skip-level wants to hold them accountable. But nobody knows whether the underperformance is because of how the manager leads, or because the team inherited a difficult set of circumstances from their predecessor.',buyers:[{role:'CHRO',pain:'"Appraisal based on outcomes alone is unfair. A strong manager in a broken team looks the same as a weak manager in a broken team."'},{role:'CEO',pain:'"I need to know who is making my organisation better and who is making it worse. Right now I can\'t tell."'},{role:'Manager',pain:'"I\'m being held responsible for things that happened before I arrived. I have no way to show what I changed."'}],starter:'"In your last performance review cycle — how did you separate manager behaviour from team context?"'},
+            'Human in the loop intelligence':{color:'#7F77DD',situation:'The organisation\'s legal team has raised concerns about AI-generated recommendations being acted on without human review. HR wants to demonstrate that PulseMeasurement does not make automated decisions about people.',buyers:[{role:'CHRO',pain:'"If we can\'t demonstrate human oversight of every action taken on the basis of AI intelligence, we have a governance problem."'},{role:'CEO',pain:'"I will not have a system that takes autonomous action on my employees. Full stop."'},{role:'Manager',pain:'"I want the AI to help me see. I want to be the one who decides what to do about what I see."'}],starter:'"When the AI surfaces a recommendation about a person — who makes the final call, and how does your current system ensure that\'s always the case?"'},
+            'Strategy cascade measurement':{color:'#BA7517',situation:'The CEO announced a new set of strategic priorities at the all-hands in January. It is now April. A leadership review asks whether the priorities have changed the work at team level. Nobody can answer with evidence.',buyers:[{role:'CEO',pain:'"I announced the strategy. I genuinely don\'t know if anything changed because of it."'},{role:'CHRO',pain:'"Strategy failure is always framed as a communication problem. It\'s actually a measurement problem. We don\'t measure whether it landed."'},{role:'Manager',pain:'"My team adjusted their work based on the new priorities. But I can\'t prove that to anyone above me."'}],starter:'"What percentage of your frontline teams could accurately articulate your top three strategic priorities right now?"'},
+            'Goal health & OKR integrity':{color:'#BA7517',situation:'The organisation runs a quarterly OKR cycle. By week three of the quarter, many OKRs have been set and forgotten. The key results are not being updated. The goals exist in a system but not in the work.',buyers:[{role:'CEO',pain:'"We do OKRs because everyone does OKRs. I\'m not sure they\'re changing anything."'},{role:'CHRO',pain:'"Goal-setting without goal-tracking is performance theatre. We\'re doing a lot of theatre."'},{role:'Manager',pain:'"I set goals with my team. Then life happens and we stop looking at them. The goals are real but the connection to daily work is broken."'}],starter:'"How do you currently know if an OKR is actually being worked on — or just logged?"'},
+            'OKR cascade integrity':{color:'#BA7517',situation:'The organisation has company OKRs, department OKRs, and team OKRs. In theory they cascade. In practice, the team OKRs were written six weeks ago and have no visible connection to what people are actually doing in their weekly updates.',buyers:[{role:'CEO',pain:'"We have goals at every level of the organisation. None of them are connected."'},{role:'CHRO',pain:'"Cascade integrity is the difference between a strategy and a wish list."'},{role:'Manager',pain:'"I can show you our team OKRs. I can\'t show you whether the work we\'re doing this week is connected to them."'}],starter:'"When was the last time you traced a company-level strategic priority all the way down to an individual\'s weekly work — and found they were genuinely connected?"'},
+            'Continuous signal vs annual survey':{color:'#1D9E75',situation:'The organisation runs an annual engagement survey. 67% response rate. Four months to analyse. Results presented to the board in a deck. By the time the results reach managers, six of the nine issues flagged have already resolved themselves or worsened beyond the intervention window.',buyers:[{role:'CHRO',pain:'"The survey tells me how people felt eight months ago. That\'s not intelligence. That\'s archaeology."'},{role:'CEO',pain:'"We spend £80K on the survey and act on maybe 20% of the findings. The rest are too stale to do anything about."'},{role:'Manager',pain:'"By the time I see the survey results, I\'ve already lost the people who flagged the problems."'}],starter:'"What would you do differently if you had a live org health picture rather than an annual survey?"'},
+            'Board org health dashboard':{color:'#7F77DD',situation:'The board has asked the CHRO to present a quarterly people risk update. The CHRO spends three weeks manually assembling data from five different systems. The result is a deck with last quarter\'s engagement scores, this quarter\'s attrition numbers, and a narrative written to reassure.',buyers:[{role:'CHRO',pain:'"I spend more time building the board deck than I spend acting on what\'s in it."'},{role:'CEO',pain:'"The board is asking better questions about people risk than we can answer. That\'s not a position I want to be in."'},{role:'Manager',pain:'"Leadership is making decisions about my team based on data that\'s three months old and one level of abstraction removed from reality."'}],starter:'"What\'s your single most important leading indicator for org health — and how current is it?"'},
+            'Automated HR narrative':{color:'#7F77DD',situation:'The people analytics team spends two weeks every month manually pulling data, writing commentary, and assembling a people narrative for the leadership team. The narrative arrives late, reflects the past, and takes longer to produce than to read.',buyers:[{role:'CHRO',pain:'"My team is spending 40% of their time producing reports that should write themselves."'},{role:'CEO',pain:'"By the time the people narrative arrives it\'s already outdated. I need something that\'s current when I read it."'},{role:'Manager',pain:'"The report about my team takes two weeks to produce and contains nothing I didn\'t already know."'}],starter:'"How long does it take your team to produce the monthly people report for leadership?"'},
+            'Post-merger integration tracking':{color:'#7F77DD',situation:'The organisation has completed an acquisition. Two cultures are being integrated. On paper the integration is on schedule. But the signals from the acquired team tell a different story — disengagement is rising, blockers are accumulating, and three high-value people are showing early attrition patterns.',buyers:[{role:'CEO',pain:'"Most acquisition value is destroyed in the integration. I need to know what\'s happening at team level before it\'s too late to course-correct."'},{role:'CHRO',pain:'"Culture integration is invisible until it fails. By then the talent has left and the value has walked out with them."'},{role:'Manager',pain:'"I\'m managing a merged team with different histories, different expectations, and different ways of working. I\'m doing it without any real-time intelligence about how it\'s going."'}],starter:'"In your last merger or restructure — at what point did you have real-time intelligence about how the integration was landing at team level?"'},
+            'Small team leadership analytics':{color:'#7F77DD',situation:'The CHRO wants to understand how the leadership team — eight people — is actually functioning. Trust levels, alignment, blockers, and whether strategy is cascading cleanly from the top. Traditional analytics tools either can\'t handle groups of eight or produce misleadingly precise scores from thin data.',buyers:[{role:'CHRO',pain:'"The leadership team is the most important team in the organisation and I have less intelligence about it than any other."'},{role:'CEO',pain:'"I can feel misalignment in my leadership team. I can\'t prove it and I can\'t address it because I have no data."'},{role:'Manager',pain:'"We talk about culture starting at the top. But we\'re the one team that never measures it."'}],starter:'"Your leadership team is also a team. Do you currently have any intelligence about how that group is actually functioning?"'},
+            'Do you know what you know?':{color:'#639922',situation:'The same blocker has been raised three times in the last two years by three different teams. Each time it was resolved — differently. None of the three solutions are documented anywhere. The fourth team is about to encounter the same problem.',buyers:[{role:'CHRO',pain:'"We solve the same problems repeatedly because we have no system for remembering what worked."'},{role:'CEO',pain:'"Our institutional memory walks out of the door with every person who leaves. We\'re getting dumber every time someone resigns."'},{role:'Manager',pain:'"I\'m reinventing things that have already been invented. It\'s demoralising and expensive."'}],starter:'"Of the people interventions your organisation has made in the last five years — where does that knowledge live, and what happens when the people who led them leave?"'},
+            'The organisation that learns':{color:'#639922',situation:'The organisation prides itself on being a learning organisation. But learning happens individually, not institutionally. When a manager successfully resolves a difficult situation, the knowledge stays with that manager. When they leave, it leaves with them.',buyers:[{role:'CHRO',pain:'"A learning organisation isn\'t one where individuals learn. It\'s one where the organisation gets smarter every time anyone solves a problem."'},{role:'CEO',pain:'"We keep making the same mistakes. Not because people aren\'t smart — because there\'s no system for institutional memory."'},{role:'Manager',pain:'"When a new challenge came up I knew there was someone who\'d dealt with something similar. But I couldn\'t find them and couldn\'t find what they\'d done."'}],starter:'"When a manager successfully resolves a difficult situation — how does the next manager who faces the same thing benefit from that experience?"'},
+            'Archive & longitudinal history':{color:'#639922',situation:'A senior leader wants to understand the trajectory of a team over the last 18 months. They have performance data, attrition data, and engagement scores. But none of it tells the story of what actually happened — the peaks, the troughs, the interventions, and the moments that changed things.',buyers:[{role:'CHRO',pain:'"I have data but no narrative. I can tell you what the scores were. I can\'t tell you why they changed."'},{role:'CEO',pain:'"Before I make a major decision about a team or a leader, I want to understand their history. Right now I can\'t."'},{role:'Manager',pain:'"When someone asks me how my team has evolved over the last year, I have to rely on my memory. I\'d rather have a record."'}],starter:'"If you could look back at the last 18 months of any team in your organisation — the real story, not the metrics — what would you most want to understand?"'},
+            'Audit trail':{color:'#E24B4A',situation:'An employment tribunal asks for a complete record of every interaction, flag, concern, and intervention related to a specific employee over the last 24 months. HR spends two weeks assembling emails, calendar invites, and manager recollections. The record is incomplete.',buyers:[{role:'CHRO',pain:'"We acted in good faith. But I can\'t prove it because the record doesn\'t exist in a form I can present."'},{role:'CEO',pain:'"The question isn\'t whether we did the right thing. It\'s whether we can show we did the right thing."'},{role:'Manager',pain:'"I did everything I was supposed to do. I just didn\'t document it in a way that anyone can now verify."'}],starter:'"If you had to produce a complete record of every people intervention in the last 12 months — how complete would it be?"'},
+            'Employee value proposition':{color:'#1D9E75',situation:'The organisation wants to introduce PulseMeasurement to its employees. The communications team is preparing the launch message. The question everyone is asking is: what\'s in it for the employee who shares honestly every week?',buyers:[{role:'CHRO',pain:'"If we can\'t answer \'what\'s in it for me\' convincingly, participation will be low and the signal will be thin."'},{role:'CEO',pain:'"Trust is the foundation of this system. And trust is built on reciprocity. We\'re asking people to share. We need to show we\'re giving something back."'},{role:'Manager',pain:'"I need to be able to look my team in the eye and tell them honestly why this is good for them — not just for me."'}],starter:'"When you introduce a new people system to your employees — what does the pitch look like from the employee\'s perspective?"'},
+          };
+
+          function openUC(name,color){
+            var u=UC[name];
+            if(!u) return;
+            var w=document.getElementById('pm3-modal-wrap');
+            document.getElementById('pm3-modal-title').textContent=name;
+            document.getElementById('pm3-modal-title').style.color=u.color||color;
+            document.getElementById('pm3-situation').textContent=u.situation;
+            document.getElementById('pm3-buyer-grid').innerHTML=u.buyers.map(function(b){return '<div class="pm3-buyer-card"><div class="pm3-buyer-role" style="color:'+(u.color||color)+'">'+b.role+'</div><div class="pm3-buyer-pain">'+b.pain+'</div></div>';}).join('');
+            document.getElementById('pm3-starter-text').textContent=u.starter;
+            document.getElementById('pm3-starter-text').style.borderLeftColor=u.color||color;
+            w.classList.add('open');
+            document.body.style.overflow='hidden';
+          }
+
+        })();
+        </script>
+
+        <div class="pm3-modal-wrap" id="pm3-modal-wrap">
+          <div class="pm3-modal">
+            <div class="pm3-modal-header">
+              <div class="pm3-modal-title" id="pm3-modal-title"></div>
+              <button class="pm3-modal-close" id="pm3-modal-close" aria-label="Close">×</button>
+            </div>
+            <div class="pm3-modal-body">
+              <div class="pm3-modal-section">
+                <div class="pm3-modal-label">The situation</div>
+                <div class="pm3-modal-text" id="pm3-situation"></div>
+              </div>
+              <div class="pm3-modal-section">
+                <div class="pm3-modal-label">The pain — by buyer</div>
+                <div class="pm3-buyer-grid" id="pm3-buyer-grid"></div>
+              </div>
+              <div class="pm3-modal-section">
+                <div class="pm3-modal-label">Discovery conversation starter</div>
+                <div class="pm3-modal-starter" id="pm3-starter-text"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          document.getElementById('pm3-modal-close').addEventListener('click',function(){
+            document.getElementById('pm3-modal-wrap').classList.remove('open');
+            document.body.style.overflow='';
+          });
+          document.getElementById('pm3-modal-wrap').addEventListener('click',function(e){
+            if(e.target===this){this.classList.remove('open');document.body.style.overflow='';}
+          });
+        </script>
+      </div>
+    </div>
+  </section>
+
+
+
+    <div class="wrap">
+      <span class="eyebrow">Six layers of trust — each providing a distinctly different perspective</span>
+      <h2 style="margin-top:20px;">Insight about your people only matters if your people trust the system producing it.</h2>
+      <p class="section-copy">PulseMeasurement is designed for organisations where trust is non-negotiable. That means AI that surfaces interpretation rather than making hidden decisions, role boundaries that are real, and a complete record of what was seen and what was done.</p>
+      <div class="grid-3">
+        <div class="card"><h3>A process, not an event</h3><p class="small">Organisations demand trust from their employees, and then run events to try to earn it. Psychological safety programmes. Speak-up initiatives. Values posters. Leadership town halls where the CEO says "there are no stupid questions." Each one is well-intentioned. Most are the organisational equivalent of throwing spaghetti at the wall and hoping something sticks.<br><br>PulseMeasurement is not an event. It is a structural mechanism for harvesting and nurturing trust — week by week, across the entire organisation. It does not ask employees to be brave. It gives them a formal procedure: a weekly conversation with an AI coach, a visible record of what they shared, a case if something warrants action, an owner assigned to that case, a timeline, and a notification when the loop closes back to them.<br><br>The procedure is what makes honesty possible. Not the ask. The mechanism. An employee who shares a concern through PulseMeasurement is not relying on their manager's good intentions or the organisation's cultural health. They are relying on an architectural guarantee: that what they raised will be logged, owned, tracked, and returned to them. The signal that arrives is therefore honest — not because we asked for honesty, but because the system makes it safe to give.</p></div>
+        <div class="card"><h3>AI that recommends, not decides</h3><p class="small">There is a particular kind of technology that makes decisions about people quietly, in the background, without telling anyone what it concluded or why. PulseMeasurement is not that.<br><br>Every interpretation the system produces comes with three things: what it saw, why it scored it the way it did, and how confident it is — including what it doesn't yet know. A manager reading a briefing is not reading a verdict. They are reading facts, harvested and assembled on their behalf, waiting for their judgment.<br><br>Suggested actions are exactly that — suggestions. The system proposes. The manager decides. The action that follows belongs to a human being who understood the context, weighed the signal, and chose to act. That is not a limitation of the system. That is the point of it.<br><br>An AI that decides things about people without telling you how it got there is not intelligence. It is just a faster way to be wrong with more confidence. PulseMeasurement assists. The judgment stays where it belongs.</p></div>
+        <div class="card"><h3>The view each role needs</h3><p class="small">An employee needs to do their best work. A manager needs to see further than any individual team member can. A leader needs to see what their managers don't yet know they're missing.<br><br>These are not the same view. And the real fragility is in the middle. The manager is the translation layer between what is actually happening and what leadership believes is happening — and it is the most frequently broken one. When it fails, leaders make decisions on comfortable fictions.<br><br>PulseMeasurement is built around this reality. Each role sees exactly what their responsibility demands — not because it's a setting, but because the architecture doesn't allow anything else. Each level is defined not by rank but by the width of their responsibility and the depth of insight they need to carry it.</p></div>
+        <div class="card"><h3>The record is the credibility</h3><p class="small">The difference between a promise and a procedure is evidence. A procedure leaves a record. A promise leaves an intention. When an employee raises something and nothing happens, the absence of a record is itself the answer — it tells them the system is not formal enough to rely on.<br><br>PulseMeasurement is built around this distinction. Every signal that rises to the level of action creates a case. That case has an owner. The owner has a plan and a timeline. If the plan was executed, the record shows it. If it was promised and quietly abandoned — the record shows that too. The silence in an audit trail is often the most important entry in it.<br><br>This is not primarily a compliance feature, though it serves compliance. It is a trust mechanism. The employee who raised something last month can see what happened. The manager who took action has a record that proves it. The leader who wants to know whether the organisation follows through on what it sees has a live answer — not a reassurance.<br><br>Trust in an organisation is not built by good intentions. It is built by what happens after something is noticed. The record is what proves that the loop closed.</p></div>
+        <div class="card"><h3>Configurable to your organisation</h3><p class="small">Every organisation believes it is unique. In the experience of most enterprise software vendors, this belief is treated as an inconvenience to be managed. The software arrives with its own assumptions about how often signals should be collected, what score should trigger concern, how groups should be structured, and what sensitivity is appropriate for the kind of people you employ. You are welcome to disagree. The software, however, will not be changing.<br><br>PulseMeasurement is built on the opposite assumption — that the organisation knows itself better than the system does.<br><br>Thresholds are yours to set. The cadence of signal collection adapts to how your organisation works, not the other way around. Group structure reflects your topology, not a generic hierarchy. And sensitivity levels — how loudly the system speaks when it sees something — are tuned to your culture, your size, and your tolerance for early intervention.<br><br>The system provides the intelligence. You decide how it listens.</p></div>
+        <div class="card"><h3>A system that grows with you</h3><p class="small">Most enterprise systems require a perfect garden before they'll tell you anything is growing. They want history, volume, clean data, and a population large enough to be statistically respectable. In other words, they are most useful precisely when you need them least.<br><br>PulseMeasurement is designed for the real world, where data arrives one weekly signal at a time.<br><br>In the early weeks, the system works with what it has. Confidence scores are honest about what the pattern can and cannot yet support. Thresholds are configurable so the system is calibrated to your organisation's size and cadence, not a generic benchmark. Latent signals surface even when the picture is still forming — flagging what deserves attention without overstating what it knows.<br><br>As signals accumulate, the picture sharpens. A month of updates is a data point. A quarter is a pattern. A year is something a good leader would have given a great deal to have known sooner.</p></div>
+        <div class="card"><h3>Three AI engines — designed for different tasks</h3><p class="small">Most AI-powered people systems run everything through a single model. One model converses with employees, scores their signals, and writes the leadership narrative — and then wonder why the conversation feels mechanical, the scores feel inconsistent, and the narrative feels thin.<br><br>PulseMeasurement uses three architecturally distinct AI engines, each chosen for a specific task.<br><br><strong>The Employee Copilot</strong> — a fast, high-volume model that handles the weekly conversation with every team member. Speed and responsiveness here are not technical details. They are the difference between an employee who engages honestly and one who abandons halfway through. The model that converses with 400 people on Monday morning cannot be the same model that writes a 2,000-word leadership narrative on Tuesday.<br><br><strong>The Signal Processing engine</strong> — a dedicated extraction model that reads every post and produces structured, confidence-scored output across sixteen dimensions. Precision and consistency are the requirements here — not creativity. Separating it into its own engine means the scoring is comparable across every signal, every week, every group.<br><br><strong>The Executive Intelligence engine</strong> — a large-context model that handles synthesis, narrative generation, and playbook creation. The tasks where depth, nuance, and plain-language quality matter most. A manager briefing written by a lightweight model reads like a summary. A briefing written by a large-context model reads like something worth acting on.<br><br>Beyond the three engines, the system runs on a multi-provider AI gateway — supporting Anthropic, OpenAI, and local Ollama, with automatic fallback and tenant-level configuration. For enterprise buyers with data residency requirements or existing AI procurement agreements, the intelligence layer works with the AI infrastructure the organisation already has or prefers. No single provider is locked in.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="use-cases" class="block">
+    <div class="wrap">
+      <span class="eyebrow">The questions leaders wish they had asked sooner</span>
+      <h2 style="margin-top:20px;">Every one of these discoveries has a cost if you don't find out until it's too late.</h2>
+      <p class="section-copy">PulseMeasurement is built around real leadership problems — the kind that show up as regret in exit interviews, as strategy reviews that find nobody changed, and as talent losses that felt sudden but weren't.</p>
+      <div class="grid-4">
+        <div class="soft-card"><span class="tag">Retention</span><p class="question">Did you know who was drifting before they resigned?</p><p class="subtle">Early Attrition Signals</p><p class="small">By the time a person decides to leave, they have usually already left — in every way that mattered.<br><br>The resignation letter is not the beginning of the story. It is the last chapter of one that started weeks, sometimes months, earlier — in a contribution that quietly shrank, a collaboration that slowly stopped, a Friday update that once ran to three paragraphs and now says everything is fine.<br><br>But leaving is not the only way a person disappears. Some stay. They attend the meetings, they hit the minimum, they cost their salary every month — and they cost considerably more than that in the quiet drag they place on every team member who still cares. A person visibly doing less is a problem. A person invisibly doing less is a culture.<br><br>PulseMeasurement reads both patterns. Not to catch anyone — but to give a manager the chance to have a conversation before the conversation becomes an exit interview, or before the silence becomes the norm.</p></div>
+        <div class="soft-card"><span class="tag">Management</span><p class="question">Do your managers actually know what is happening in their teams?</p><p class="subtle">Manager Intelligence Briefings</p><p class="small">A manager who doesn't know what's happening in their team isn't managing. They're hoping.<br><br>Hope is not a management strategy. It is what fills the gap between what a manager is told and what is actually true. Most managers are told what people think they want to hear — the edited version, the optimistic version, the version that doesn't create awkward conversations on a Thursday afternoon.<br><br>The result is a manager who is confident and wrong. Who walks into a one-on-one without knowing that the person across the table has been quietly absorbing two people's workload for six weeks. Who reports upward that the team is fine, because the team has learned that fine is the safest answer.<br><br>PulseMeasurement gives managers the briefing they were never going to get any other way — not because people are hiding things, but because most people don't know how to surface what they're carrying until someone builds them a safe way to do it.<br><br>That briefing arrives before the one-on-one, not after the damage. It tells the manager what to notice, what to ask, and where to look. It doesn't make the conversation for them — it makes the conversation possible. The manager still leads. They just no longer have to lead blind.</p></div>
+        <div class="soft-card"><span class="tag">Strategy</span><p class="question">Did your last strategic priority change anything at team level?</p><p class="subtle">Strategy Cascade Measurement</p><p class="small">Announcing a strategy and implementing one are two entirely different achievements. Most organisations are considerably better at the first.<br><br>The pattern is familiar. A priority is declared at the leadership offsite. It is communicated in a company all-hands. It is added to the slide deck. And then, at the floor level where the actual work happens, people nod — and carry on doing what they were doing before, because nobody has changed their goals, their incentives, or their understanding of what success now looks like.<br><br>Six months later, leadership reviews progress and finds the needle has not moved. The diagnosis is usually execution failure. The actual diagnosis, more often, is a cascade failure — the strategy never reached the work in any form that changed it.<br><br>PulseMeasurement measures the distance between what was announced and what actually changed. It tracks whether goals at team level reflect the strategic priority. It reads whether the signals coming from the work suggest the priority landed — or quietly evaporated somewhere between the boardroom and the desk.<br><br>Strategy is not what was announced. It is whether it moved the needle.</p></div>
+        <div class="soft-card"><span class="tag">Talent</span><p class="question">Who is leading before they have the title?</p><p class="subtle">Emerging Leader Identification</p><p class="small">Every organisation has heroes. The question is whether you catch them at the right moment — or find out about them in an exit interview.<br><br>Leadership potential rarely announces itself. It shows up quietly — in the person who explains things more clearly than their colleagues do, who others turn to before they escalate, who absorbs the uncertainty in a room and gives back direction. None of this shows up in a performance review. Most of it never gets mentioned at all.<br><br>The tragedy is not that organisations lack emerging leaders. It is that they find out who they were after they have left, promoted them too late, or watched them go somewhere that noticed sooner.<br><br>PulseMeasurement surfaces the patterns that precede the title — who helps, who clarifies, who carries more than their role requires, who the network quietly organises itself around. Not to fast-track anyone automatically, but to make sure the right conversation happens before the right person stops waiting for it.</p></div>
+        <div class="soft-card"><span class="tag">Knowledge</span><p class="question">When your best people leave, what leaves with them?</p><p class="subtle">Knowledge Network Mapping</p><p class="small">The most expensive thing that walks out of your organisation doesn't show up on a balance sheet.<br><br>Every organisation has people who are, quietly, its memory. They know why the system was built the way it was. They know which client needs handling carefully and why. They know the three things that will go wrong if you change the process — because they were there the last time someone tried. They are not always the most senior. They are not always the most visible. But when they leave, the organisation discovers what it knew — and what it only knew because of them.<br><br>The knowledge gap doesn't announce itself on the day someone resigns. It shows up three months later, when a problem gets solved the hard way because nobody remembered it had already been solved.<br><br>PulseMeasurement identifies the people the organisation learns from — the ones whose help requests get answered fastest, whose explanations get shared, whose contributions others build on. Not to make them irreplaceable, but to make sure their knowledge doesn't leave when they do.</p></div>
+        <div class="soft-card"><span class="tag">Reporting</span><p class="question">Can you show the board people risk before it becomes a headline?</p><p class="subtle">Board-Level Org Health</p><p class="small">A board that only hears good news is not being led. It is being managed.<br><br>Most board reporting on people risk is assembled the week before the meeting — pulled together from engagement survey averages, headcount numbers, and a narrative written to reassure rather than inform. By the time it reaches the boardroom, it is already three months old, selectively optimistic, and entirely useless as a basis for decision-making.<br><br>The board asks the right questions. Are we retaining the people we need? Is our leadership pipeline healthy? Are there risks we should be aware of? The answers they receive are the answers someone decided they should hear — not the answers the organisation actually knows.<br><br>PulseMeasurement gives boards live people intelligence — not assembled for the occasion, but running continuously. Risk, momentum, strategy alignment, and emerging talent, visible in the same view, updated as the signals arrive. Not a presentation. A picture. And one that nobody had to curate before the meeting.<br><br>The board deserves to know what the organisation knows. PulseMeasurement makes that possible.</p></div>
+        <div class="soft-card"><span class="tag">Learning</span><p class="question">Does your organisation remember what worked?</p><p class="subtle">Institutional Memory</p><p class="small">Most organisations are remarkably good at solving the same problem twice. Not because they enjoy it — but because nobody captured what worked the first time.<br><br>The pattern is familiar. A difficult situation arises. A manager handles it well — the right conversation at the right moment, the right intervention that turned things around. The outcome is good. The knowledge of how it was achieved lives entirely in one person's memory. When that person moves on, the knowledge moves with them. The next manager who faces the same situation starts from zero.<br><br>This is not a failure of intelligence. It is a failure of documentation. The organisation knew what to do. It just never wrote it down in a place the next person could find.<br><br>PulseMeasurement closes the loop. Every resolved case, every successful intervention, every pattern that was recognised and acted on — captured, searchable, and available to the next person who needs it. The organisation that learns is not one where individuals get smarter. It is one where the system gets smarter every time anyone solves a problem.</p></div>
+        <div class="soft-card"><span class="tag">Blockers</span><p class="question">What is slowing your teams down that nobody has told you about?</p><p class="subtle">Hidden Blocker Detection</p><p class="small">A blocker is rarely the thing that breaks a project. It is the thing that was quietly absorbing three people's energy for six weeks before the project broke.<br><br>Blockers don't get escalated. They get absorbed. The person facing the blocker adjusts, works around it, compensates with extra hours, and tells their manager things are fine — because raising a blocker feels like admitting a problem, and admitting a problem feels like admitting failure. By the time the blocker surfaces formally, it has already compounded into a delay, a burnout pattern, or a resignation.<br><br>The signal was always there. In the update that mentioned the dependency. In the help request that went unanswered. In the capacity score that was climbing quietly for three weeks. PulseMeasurement reads all three — and connects them before the connection becomes a crisis.<br><br>Blockers rarely get escalated. They get absorbed — until they cause delays, burnout, or attrition. PulseMeasurement surfaces them while they are still a conversation, not yet a consequence.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="richness" class="block">
+    <div class="wrap">
+      <span class="eyebrow">The information richness framework</span>
+      <h2 style="margin-top:20px;">Six dimensions of richness — scored across every system you are currently using</h2>
+      <p class="section-copy">In 2000, Evans and Wurster identified six dimensions that determine whether information is truly rich — or merely voluminous. Every people intelligence system in common use fails on at least four of them. The comparison below is structural, not rhetorical.</p>
+      <p class="section-copy" style="margin-top:8px;font-size:13px;color:var(--muted);">Evans, P. and Wurster, T.S. (2000) <em>Blown to Bits: How the New Economics of Information Transforms Strategy.</em> Boston, MA: Harvard Business School Press.</p>
+
+      <div style="margin-top:32px;overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:720px;">
+          <thead>
+            <tr>
+              <th style="padding:12px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;text-align:left;background:var(--soft);border-bottom:1px solid var(--line);color:var(--muted);width:150px;">Dimension</th>
+              <th style="padding:12px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;text-align:left;background:var(--soft);border-bottom:1px solid var(--line);color:#b83232;">Annual Survey</th>
+              <th style="padding:12px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;text-align:left;background:var(--soft);border-bottom:1px solid var(--line);color:var(--amber);">Management Hierarchy</th>
+              <th style="padding:12px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;text-align:left;background:var(--teal);border-bottom:1px solid var(--line);color:white;">PulseMeasurement</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:18px 16px;font-size:12px;background:var(--soft);border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:top;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:3px;">Bandwidth</div><div style="font-size:11px;color:var(--muted);line-height:1.5">How much information the channel can carry</div></td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6"><span style="display:inline-block;background:#fbeaea;color:#b83232;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">Low</span><br>Fixed questions, pre-defined categories. The employee can only answer what they are asked. Everything else goes unsaid.</td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6"><span style="display:inline-block;background:var(--soft);color:var(--amber);font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">Compressed</span><br>Rich at the source — compressed in transit. What travels upward is what each manager chose to pass on.</td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6;background:var(--teal-light, #e1f5ee);font-weight:500"><span style="display:inline-block;background:var(--teal);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">High</span><br>An open weekly question shaped by an AI conversation coach. No fixed categories. The employee says what they actually mean.</td>
+            </tr>
+            <tr>
+              <td style="padding:18px 16px;font-size:12px;background:var(--soft);border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:top;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:3px;">Customisation</div><div style="font-size:11px;color:var(--muted);line-height:1.5">How tailored to the individual</div></td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6"><span style="display:inline-block;background:#fbeaea;color:#b83232;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">None</span><br>The same questions for every person in every role. One size fits no one particularly well.</td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6"><span style="display:inline-block;background:var(--soft);color:var(--amber);font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">Inconsistent</span><br>Each manager customises their interpretation. No standard, no comparability.</td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6;background:#e1f5ee;font-weight:500"><span style="display:inline-block;background:var(--teal);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">High</span><br>Every signal contextualised against role, goals, and strategic imperatives. Shaped to the person, not the population.</td>
+            </tr>
+            <tr>
+              <td style="padding:18px 16px;font-size:12px;background:var(--soft);border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:top;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:3px;">Interactivity</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Whether information flows both ways</div></td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6"><span style="display:inline-block;background:#fbeaea;color:#b83232;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">None</span><br>A broadcast. The organisation asks. The employee answers. Nothing comes back. The loop never closes.</td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6"><span style="display:inline-block;background:var(--soft);color:var(--amber);font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">One direction</span><br>Information travels upward. Responses travel downward. The connection between what was said and what was decided is rarely visible.</td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6;background:#e1f5ee;font-weight:500"><span style="display:inline-block;background:var(--teal);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">Two-way</span><br>Every signal that is acted on closes a loop back to the person who raised it. Help is routed. Recognition is given. The monthly reflection returns a private narrative.</td>
+            </tr>
+            <tr>
+              <td style="padding:18px 16px;font-size:12px;background:var(--soft);border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:top;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:3px;">Reliability</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Whether the information can be trusted</div></td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6"><span style="display:inline-block;background:#fbeaea;color:#b83232;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">Compromised</span><br>Answers shaped by what people think is safe to say. The survey measures perceived safety as much as reality.</td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6"><span style="display:inline-block;background:var(--soft);color:var(--amber);font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">Filtered</span><br>Every manager is a reliability risk. Good managers pass truth upward. Poor managers pass comfort. No systematic way to tell the difference.</td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6;background:#e1f5ee;font-weight:500"><span style="display:inline-block;background:var(--teal);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">High</span><br>The AI conversation coach surfaces the honest answer. Every interpretation carries a confidence score and reasoning path. The system shows what it knows and how certain it is.</td>
+            </tr>
+            <tr>
+              <td style="padding:18px 16px;font-size:12px;background:var(--soft);border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:top;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:3px;">Security</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Who else can see the information</div></td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6"><span style="display:inline-block;background:var(--soft);color:var(--amber);font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">Questionable</span><br>Nominally anonymous — but aggregation at small group level reveals individuals. The anonymity promised is rarely delivered.</td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6"><span style="display:inline-block;background:#fbeaea;color:#b83232;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">No boundaries</span><br>Information shared with a manager has no formal boundary. It travels where relationship and discretion allow.</td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6;background:#e1f5ee;font-weight:500"><span style="display:inline-block;background:var(--teal);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">Architectural</span><br>Role boundaries are not settings. They are architectural. What an employee, manager, and leader each see is separated by design — not configuration.</td>
+            </tr>
+            <tr>
+              <td style="padding:18px 16px;font-size:12px;background:var(--soft);border-right:1px solid var(--line);vertical-align:top;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:3px;">Currency</div><div style="font-size:11px;color:var(--muted);line-height:1.5">How current the information is</div></td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--muted);vertical-align:top;line-height:1.6"><span style="display:inline-block;background:#fbeaea;color:#b83232;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">3–12 months old</span><br>By the time the survey arrives, the situations it describes have already resolved, compounded, or been overtaken by events.</td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--muted);vertical-align:top;line-height:1.6"><span style="display:inline-block;background:var(--soft);color:var(--amber);font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">Days to weeks</span><br>Better than a survey — but what reaches the top still reflects last week's interpretation, filtered through every layer in between.</td>
+              <td style="padding:18px 16px;font-size:13px;color:var(--ink);vertical-align:top;line-height:1.6;background:#e1f5ee;font-weight:500"><span style="display:inline-block;background:var(--teal);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">Real-time</span><br>This week's signal, scored within days, briefed before the next one-on-one. Intelligence which is late is already overtaken by events.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:28px;padding:20px 24px;background:var(--navy);border-radius:10px;max-width:800px;">
+        <p style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;color:white;line-height:1.7;">PulseMeasurement is the fourth option — what happens when you stop choosing between knowing broadly, knowing deeply, and knowing in time, and build a system that does all three continuously, from the work itself.</p>
+      </div>
+
+      <div style="margin-top:20px;">
+        <a href="rich-information-at-scale.html" style="font-size:13px;color:var(--teal);font-weight:600;display:inline-flex;align-items:center;gap:5px;">What modern AI engines change — and what they don't →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="value-proposition" class="block" style="padding:0;background:var(--paper);">
+    <style>
+    /* Value Proposition embedded styles — scoped to #value-proposition */
+    :root {
+    --ink: #0c1510;
+    --navy: #0a1628;
+    --teal: #0d9488;
+    --teal-dim: rgba(13,148,136,.12);
+    --teal-bright: #10b9ac;
+    --amber: #b86a0f;
+    --amber-light: #fdf0e0;
+    --paper: #f8f6f1;
+    --soft: #f0ede6;
+    --line: #ddd9d2;
+    --muted: #5c6b61;
+    --white: #ffffff;
+
+    --p1: #0d9488; /* Signal — teal */
+    --p2: #1d6fb8; /* Goal — blue */
+    --p3: #7c3aed; /* Briefing — violet */
+    --p4: #b83232; /* Action — red */
+    --p5: #c47b1a; /* Knowledge — amber */
+    --p6: #2d7a3a; /* Memory — green */
+    --p7: #374151; /* Agent — slate */
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden}
+
+    /* NAV */
+    #value-proposition .topbar {position:sticky;top:0;z-index:100;background:rgba(248,246,241,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(12px);padding:0 48px;display:flex;align-items:center;justify-content:space-between;min-height:64px}
+    #value-proposition .brand {display:flex;align-items:center;gap:10px;text-decoration:none}
+    #value-proposition .mark {width:30px;height:30px;background:var(--teal);border-radius:6px;display:grid;place-items:center;color:white;font-weight:800;font-size:12px;font-family:'DM Mono',monospace}
+    #value-proposition .brand-name {font-weight:600;font-size:15px;color:var(--navy);letter-spacing:-.01em}
+    #value-proposition .back {font-size:13px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:4px}
+    #value-proposition .back:hover {color:var(--teal)}
+
+    /* HERO */
+    #value-proposition .hero {position:relative;overflow:hidden;padding:96px 48px 80px;background:var(--navy)}
+    #value-proposition .hero::before {content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%, rgba(13,148,136,.15) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(29,111,184,.1) 0%, transparent 50%)}
+    #value-proposition .hero-inner {max-width:1080px;margin:0 auto;position:relative;z-index:1}
+    #value-proposition .hero-tag {font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(141,227,216,.7);margin-bottom:24px}
+    #value-proposition .hero h1 {font-family:'Cormorant Garamond',serif;font-size:clamp(44px,6vw,76px);font-weight:700;line-height:1.02;letter-spacing:-.02em;color:white;max-width:820px;margin-bottom:24px}
+    #value-proposition .hero h1 em {font-style:italic;color:#8de3d8}
+    #value-proposition .hero-lead {font-size:17px;color:rgba(255,255,255,.65);line-height:1.78;max-width:620px;font-weight:300;margin-bottom:40px}
+    #value-proposition .pillar-nav {display:flex;flex-wrap:wrap;gap:8px}
+    #value-proposition .pillar-nav-btn {font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:3px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);cursor:pointer;transition:all .15s;background:transparent}
+    #value-proposition .pillar-nav-btn:hover {background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+    #value-proposition .pillar-nav-btn.active {color:white;border-color:currentColor}
+
+    /* PILLARS GRID */
+    #value-proposition .pillars-section {padding:0 48px 80px;background:var(--navy)}
+    #value-proposition .pillars-inner {max-width:1080px;margin:0 auto}
+    #value-proposition .pillars-grid {display:grid;grid-template-columns:repeat(11,1fr);gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);border-radius:0 0 16px 16px;overflow:hidden}
+    #value-proposition .pillar-col {background:rgba(255,255,255,.02);transition:background .2s;cursor:pointer;position:relative}
+    #value-proposition .pillar-col:hover {background:rgba(255,255,255,.05)}
+    #value-proposition .pillar-col.active {background:rgba(255,255,255,.07)}
+    #value-proposition .pillar-top {padding:24px 18px 20px;border-bottom:1px solid rgba(255,255,255,.06)}
+    #value-proposition .pillar-num {font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:rgba(255,255,255,.25);margin-bottom:14px}
+    #value-proposition .pillar-icon {width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:12px}
+    #value-proposition .pillar-name {font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:white;line-height:1.3;margin-bottom:0}
+    #value-proposition .pillar-bar {height:3px;width:100%}
+    #value-proposition .pillar-bottom {padding:20px 18px}
+    #value-proposition .pillar-value {font-size:12px;color:rgba(255,255,255,.5);line-height:1.6}
+    #value-proposition .pillar-col.active .pillar-value {color:rgba(255,255,255,.8)}
+
+    /* DETAIL PANEL */
+    #value-proposition .detail-section {padding:64px 48px;background:var(--paper);border-top:1px solid var(--line)}
+    #value-proposition .detail-inner {max-width:1080px;margin:0 auto}
+    #value-proposition .detail-panel {display:none}
+    #value-proposition .detail-panel.active {display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+    #value-proposition .detail-left {}
+    #value-proposition .detail-eyebrow {display:flex;align-items:center;gap:10px;margin-bottom:20px}
+    #value-proposition .detail-num {font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--muted)}
+    #value-proposition .detail-badge {font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:3px;font-weight:500}
+    #value-proposition .detail-h2 {font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,48px);font-weight:700;line-height:1.1;letter-spacing:-.02em;color:var(--navy);margin-bottom:16px}
+    #value-proposition .detail-h2 em {font-style:italic}
+    #value-proposition .detail-value {font-size:16px;color:var(--muted);line-height:1.75;margin-bottom:24px;font-weight:300;border-left:3px solid;padding-left:18px}
+    #value-proposition .detail-desc {font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:24px}
+    #value-proposition .detail-right {}
+    #value-proposition .buyer-cards {display:flex;flex-direction:column;gap:12px}
+    #value-proposition .buyer-card {padding:18px 20px;border-radius:10px;border:1px solid var(--line);background:white}
+    #value-proposition .buyer-role {font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px;font-weight:500}
+    #value-proposition .buyer-value {font-size:14px;color:var(--ink);line-height:1.6}
+    #value-proposition .detail-metrics {display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+    #value-proposition .metric-card {padding:16px;border-radius:8px;background:var(--soft);text-align:center}
+    #value-proposition .metric-num {font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;line-height:1;margin-bottom:4px}
+    #value-proposition .metric-label {font-size:11px;color:var(--muted);line-height:1.4}
+    #value-proposition .pointers {display:flex;flex-direction:column;gap:0;margin-top:20px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    #value-proposition .pointer-item {padding:14px 16px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s}
+    #value-proposition .pointer-item:last-child {border-bottom:none}
+    #value-proposition .pointer-item:hover {background:var(--soft)}
+    #value-proposition .pointer-header {display:flex;align-items:center;justify-content:space-between;gap:8px}
+    #value-proposition .pointer-label {font-size:13px;font-weight:600;color:var(--ink)}
+    #value-proposition .pointer-chevron {font-size:11px;color:var(--muted);transition:transform .2s}
+    #value-proposition .pointer-item.open .pointer-chevron {transform:rotate(180deg)}
+    #value-proposition .pointer-detail {font-size:12px;color:var(--muted);line-height:1.65;max-height:0;overflow:hidden;transition:max-height .25s ease,padding .25s ease}
+    #value-proposition .pointer-item.open .pointer-detail {max-height:120px;padding-top:8px}
+
+    /* SUMMARY TABLE */
+    #value-proposition .summary-section {padding:64px 48px;background:var(--soft);border-top:1px solid var(--line)}
+    #value-proposition .summary-inner {max-width:1080px;margin:0 auto}
+    #value-proposition .section-label {font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+    #value-proposition h2.summary-h2 {font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.5vw,42px);font-weight:700;line-height:1.1;color:var(--navy);margin-bottom:12px}
+    #value-proposition .summary-table {width:100%;border-collapse:collapse;margin-top:32px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+    #value-proposition .summary-table th {padding:12px 18px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-align:left;background:var(--navy);color:rgba(255,255,255,.6);border-bottom:1px solid rgba(255,255,255,.08)}
+    #value-proposition .summary-table th:first-child {color:rgba(255,255,255,.4)}
+    #value-proposition .summary-table td {padding:16px 18px;font-size:13px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
+    #value-proposition .summary-table tr:last-child td {border-bottom:none}
+    #value-proposition .summary-table tr:nth-child(even) td {background:white}
+    #value-proposition .summary-table tr:nth-child(odd) td {background:var(--paper)}
+    #value-proposition .pillar-tag {display:inline-flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;white-space:nowrap}
+    #value-proposition .pillar-dot {width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+    /* CTA */
+    #value-proposition .cta-section {padding:80px 48px;background:var(--navy);text-align:center}
+    #value-proposition .cta-inner {max-width:560px;margin:0 auto}
+    #value-proposition .cta-section h2 {font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,48px);font-weight:700;color:white;margin-bottom:14px;line-height:1.1}
+    #value-proposition .cta-section h2 em {font-style:italic;color:#8de3d8}
+    #value-proposition .cta-section p {font-size:15px;color:rgba(255,255,255,.55);margin-bottom:32px;line-height:1.75;font-weight:300}
+    #value-proposition .btn-teal {display:inline-block;padding:14px 32px;background:var(--teal);color:white;border-radius:8px;font-size:14px;font-weight:600;letter-spacing:.01em;text-decoration:none;transition:background .15s}
+    #value-proposition .btn-teal:hover {background:#0b7c72}
+
+    @media(max-width:1000px){ {
+      #value-proposition .pillars-grid {grid-template-columns:1fr 1fr;grid-template-rows:auto}
+      #value-proposition .detail-panel.active {grid-template-columns:1fr}
+    }
+    @media(max-width:700px){ {
+      #value-proposition .topbar,.hero,.pillars-section,.detail-section,.summary-section,.cta-section {padding-left:24px;padding-right:24px}
+      #value-proposition .pillars-grid {grid-template-columns:1fr}
+    }
+    </style>
+    <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">Value Proposition</div>
+      <h1>Eleven pillars of value. <em>One weekly signal.</em></h1>
+      <p class="hero-lead">PulseMeasurement delivers value across eleven distinct pillars — each one addressing a different failure mode in how organisations currently understand themselves. Select a pillar to explore what it delivers and who it serves.</p>
+      <div class="pillar-nav" id="pillar-nav">
+        <button class="pillar-nav-btn active" data-pillar="0" style="border-color:#0d9488;color:#8de3d8">01 Signal Intelligence</button>
+        <button class="pillar-nav-btn" data-pillar="1">02 Goal Alignment</button>
+        <button class="pillar-nav-btn" data-pillar="2">03 Leadership Briefings</button>
+        <button class="pillar-nav-btn" data-pillar="3">04 Action &amp; Remediation</button>
+        <button class="pillar-nav-btn" data-pillar="4">05 Knowledge Discovery</button>
+        <button class="pillar-nav-btn" data-pillar="5">06 Organisational Memory</button>
+        <button class="pillar-nav-btn" data-pillar="6">07 Agent-Ready Data</button>
+        <button class="pillar-nav-btn" data-pillar="7">08 AI Conversation Coach</button>
+        <button class="pillar-nav-btn" data-pillar="8">09 Intelligence Delivery</button>
+        <button class="pillar-nav-btn" data-pillar="9">10 Mentions &amp; Trends</button>
+        <button class="pillar-nav-btn" data-pillar="10">11 Teams &amp; Email Integration</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PILLARS GRID -->
+  <div class="pillars-section">
+    <div class="pillars-inner">
+      <div class="pillars-grid" id="pillars-grid"></div>
+    </div>
+  </div>
+
+  <!-- DETAIL PANELS -->
+  <div class="detail-section">
+    <div class="detail-inner" id="detail-container"></div>
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <div class="summary-section">
+    <div class="summary-inner">
+      <div class="section-label">Complete value map</div>
+      <h2 class="summary-h2">All eleven pillars — what each one delivers and who it serves</h2>
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Pillar</th>
+            <th>Buyer value</th>
+            <th>Primary beneficiary</th>
+          </tr>
+        </thead>
+        <tbody id="summary-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- COMPETITIVE CHALLENGE -->
+  <div style="padding:72px 48px;background:var(--soft);border-top:1px solid var(--line)">
+    <div style="max-width:1080px;margin:0 auto">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:20px">An honest invitation</div>
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.5vw,44px);font-weight:700;line-height:1.1;color:var(--navy);margin-bottom:20px">Before you book a demo with us — <em style="font-style:italic;color:var(--teal)">book one with them.</em></h2>
+          <p style="font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:16px;font-weight:300">Take these eleven pillars. Ask every competing system the same questions. If they can answer yes to all eleven — with evidence, not a roadmap — choose them.</p>
+          <p style="font-size:15px;color:var(--muted);line-height:1.8;font-weight:300">We are confident enough in this framework to invite you to test us on it. And to test every other system on exactly the same standard.</p>
+          <div style="margin-top:28px;padding:20px 22px;background:var(--navy);border-radius:10px;max-width:480px">
+            <p style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:white;line-height:1.65">If they can answer yes to all eleven — with evidence, not a roadmap — choose them.</p>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:16px;font-family:'DM Mono',monospace">The eleven questions to ask every vendor</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="padding:14px 16px;background:white;border-radius:8px;border:1px solid var(--line);border-left:3px solid var(--p1)">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--p1);margin-bottom:5px;font-family:'DM Mono',monospace">01 Signal Intelligence</div>
+              <div style="font-size:13px;color:var(--muted);line-height:1.55">Can you show me where friction or trust loss is emerging in my organisation this week — not last quarter?</div>
+            </div>
+            <div style="padding:14px 16px;background:white;border-radius:8px;border:1px solid var(--line);border-left:3px solid var(--p2)">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--p2);margin-bottom:5px;font-family:'DM Mono',monospace">02 Goal Alignment</div>
+              <div style="font-size:13px;color:var(--muted);line-height:1.55">Can you show me whether my last strategic priority actually changed how people are working at team level?</div>
+            </div>
+            <div style="padding:14px 16px;background:white;border-radius:8px;border:1px solid var(--line);border-left:3px solid var(--p3)">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--p3);margin-bottom:5px;font-family:'DM Mono',monospace">03 Leadership Briefings</div>
+              <div style="font-size:13px;color:var(--muted);line-height:1.55">Can you show me what my managers need to notice this Monday morning — in plain language, before their first one-on-one?</div>
+            </div>
+            <div style="padding:14px 16px;background:white;border-radius:8px;border:1px solid var(--line);border-left:3px solid var(--p4)">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--p4);margin-bottom:5px;font-family:'DM Mono',monospace">04 Action & Remediation</div>
+              <div style="font-size:13px;color:var(--muted);line-height:1.55">Can you show me the complete record of every people intervention in the last twelve months — including the ones that were promised and never followed through on?</div>
+            </div>
+            <div style="padding:14px 16px;background:white;border-radius:8px;border:1px solid var(--line);border-left:3px solid var(--p5)">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--p5);margin-bottom:5px;font-family:'DM Mono',monospace">05 Knowledge Discovery</div>
+              <div style="font-size:13px;color:var(--muted);line-height:1.55">Can you show me who my emerging leaders are — without asking any manager to nominate them?</div>
+            </div>
+            <div style="padding:14px 16px;background:white;border-radius:8px;border:1px solid var(--line);border-left:3px solid var(--p6)">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--p6);margin-bottom:5px;font-family:'DM Mono',monospace">06 Organisational Memory</div>
+              <div style="font-size:13px;color:var(--muted);line-height:1.55">Can you show me what the organisation knew last year that walked out the door when three people left?</div>
+            </div>
+            <div style="padding:14px 16px;background:white;border-radius:8px;border:1px solid var(--line);border-left:3px solid var(--p7)">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--p7);margin-bottom:5px;font-family:'DM Mono',monospace">07 Agent-Ready Data</div>
+              <div style="font-size:13px;color:var(--muted);line-height:1.55">Can you show me the structured data layer your AI agents will be able to reason over in two years?</div>
+            </div>
+            <div style="padding:14px 16px;background:white;border-radius:8px;border:1px solid var(--line);border-left:3px solid #0e7490">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0e7490;margin-bottom:5px;font-family:'DM Mono',monospace">08 AI Conversation Coach</div>
+              <div style="font-size:13px;color:var(--muted);line-height:1.55">Can you show me a system that helps my team members say what they actually mean — not what feels safe to say?</div>
+            </div>
+            <div style="padding:14px 16px;background:white;border-radius:8px;border:1px solid var(--line);border-left:3px solid #6d28d9">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6d28d9;margin-bottom:5px;font-family:'DM Mono',monospace">09 Intelligence Delivery</div>
+              <div style="font-size:13px;color:var(--muted);line-height:1.55">Can you show me how intelligence from eighteen months of signals reaches the manager who needs it — before the one-on-one, not after?</div>
+            </div>
+            <div style="padding:14px 16px;background:white;border-radius:8px;border:1px solid var(--line);border-left:3px solid #0369a1">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0369a1;margin-bottom:5px;font-family:'DM Mono',monospace">10 Mentions &amp; Trends</div>
+              <div style="font-size:13px;color:var(--muted);line-height:1.55">Can you show me which topics and people are rising in the organisational conversation — before they surface as a formal concern?</div>
+            </div>
+            <div style="padding:14px 16px;background:white;border-radius:8px;border:1px solid var(--line);border-left:3px solid #0f766e">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0f766e;margin-bottom:5px;font-family:'DM Mono',monospace">11 Teams &amp; Email Integration</div>
+              <div style="font-size:13px;color:var(--muted);line-height:1.55">Can you capture honest signals from my entire organisation without asking anyone to log into a new tool or change a single habit?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-inner">
+      <h2>See the value <em>in your organisation</em></h2>
+      <p>The demo is built around your role and the pillar that matters most to you right now. Tell us which one — we will show you what it looks like in practice.</p>
+      <a class="btn-teal" href="mailto:demo@pulsemeasurement.com">Request a demo</a>
+    </div>
+  </div>
+
+<script>
+const PILLARS = [
+  {
+    color: '#0d9488',
+    icon: '⚡',
+    num: '01',
+    name: 'Signal Intelligence',
+    value: 'Know where friction, trust loss, overload, or misalignment is emerging — before it becomes a crisis.',
+    desc: 'Most organisations discover problems through outcomes — resignations, missed targets, disengaged teams. Signal Intelligence inverts this. Every week, continuous signals are harvested from team communication, scored across sixteen dimensions, and surfaced as patterns before they compound into consequences. The signal arrives before the damage. The window to act stays open.',
+    pointers: [
+      { label: '16D spectral scoring', detail: 'Every signal is scored across sixteen dimensions — capacity, alignment, risk, momentum, blockers, and more — each with an explicit confidence level.' },
+      { label: 'Latent signal detection', detail: 'A dedicated background aggregation job surfaces signals that did not score highly individually but form a meaningful pattern in aggregate — the pattern nobody would have noticed until it became a problem.' },
+      { label: 'Sentiment trendline', detail: 'Sentiment and alignment averages are tracked across up to 12 historical briefing snapshots and rendered as a trendline — so leaders see direction of travel, not just current state.' },
+      { label: 'Group trust signal', detail: 'Trust between a team and its manager is measured as a dedicated signal dimension — giving leaders visibility into relational health that no other metric captures.' },
+      { label: 'Configurable pillars', detail: 'Each group has configurable signal pillars that shape how intelligence is interpreted for that group\'s specific context, size, and mandate.' },
+      { label: 'Signal Processing engine', detail: 'A dedicated AI extraction engine reads every post and produces structured, confidence-scored output across sixteen dimensions. Separating scoring into its own engine means it is precise, consistent, and comparable across every signal, every week, every group — not dependent on the same model handling conversation and narrative simultaneously.' },
+    ],
+    buyers: [
+      { role: 'CHRO', value: 'Real-time visibility into where friction, trust loss, or disengagement is emerging across every team — not next quarter, this week.' },
+      { role: 'CEO', value: 'A live organisational health picture that answers the question every leader should be able to answer: what is actually happening, and where?' },
+      { role: 'Manager', value: 'Early warning on the signals in your team that you would not otherwise see until they become a conversation you wish you had started earlier.' },
+    ],
+    metrics: [
+      { num: '16', label: 'Dimensions scored per signal' },
+      { num: '7', label: 'Days from signal to briefing' },
+      { num: '∞', label: 'Continuous — not annual' },
+    ],
+  },
+  {
+    color: '#1d6fb8',
+    icon: '🎯',
+    num: '02',
+    name: 'Goal Alignment',
+    value: 'Connect employee experience to business priorities and execution — and see whether the connection is holding.',
+    desc: 'Strategy is announced at the top. It is supposed to reach the floor. Most of the time, it does not — or it arrives so diluted by interpretation and distance that what changes at desk level bears little resemblance to what was intended in the boardroom. Goal Alignment connects individual work to strategic imperatives, tracks whether the connection is real, and shows leaders the distance between what was declared and what actually changed.',
+    pointers: [
+      { label: 'Goal linking at compose time', detail: 'Employees can intentionally link their weekly signal to a goal at the moment of writing — making the connection between daily work and strategic priorities explicit and traceable.' },
+      { label: 'Maker-checker governance', detail: 'Goals have a propose-and-approve workflow — someone sets the goal, someone validates it. Governance is built into the goal architecture, not added as an afterthought.' },
+      { label: 'Directives cascade', detail: 'Strategic directives from leadership are tracked through the system — with acknowledgement, response, and behavioural change all visible in the signal layer.' },
+      { label: 'Three-level cascade visibility', detail: 'Goal alignment is visible at individual, team, and organisational level simultaneously — showing where strategy is landing and where it is stalling.' },
+      { label: 'Alignment average trendline', detail: 'Alignment average is tracked across 12 briefing snapshots — so leaders can see whether strategic focus is strengthening or drifting over time.' },
+    ],
+    buyers: [
+      { role: 'CEO', value: 'Proof that your last strategic priority changed how people are actually working — not just how they are talking about it in status meetings.' },
+      { role: 'CHRO', value: 'A live cascade measurement that shows whether OKRs are linked all the way down to team activity — or just logged and forgotten.' },
+      { role: 'Manager', value: 'Clarity on whether your team\'s daily work is connected to the organisation\'s strategic imperatives — and where the gaps are.' },
+    ],
+    metrics: [
+      { num: '3', label: 'Levels: individual, team, org' },
+      { num: '1', label: 'Question connects work to strategy' },
+      { num: '↓', label: 'Strategy cascades down' },
+    ],
+  },
+  {
+    color: '#7c3aed',
+    icon: '📋',
+    num: '03',
+    name: 'Leadership Briefings',
+    value: 'Tell managers what needs attention and what to do about it — not just what changed.',
+    desc: 'A dashboard tells you what changed. A briefing tells you what it means. Leadership Briefings are AI-generated plain-language narratives — written from the week\'s signals, delivered before the one-on-one. Each briefing tells the manager what to notice, what to ask, and where to look. It does not replace the manager\'s judgment. It creates the conditions for it. The manager who reads the briefing on Monday morning is a different manager than the one who walked in without it.',
+    pointers: [
+      { label: 'AI-generated narrative', detail: 'The briefing is written by the large-context AI model — not a template filled with variables, but a genuine narrative from the week\'s signals. The manager reads a story, not a spreadsheet.' },
+      { label: 'Attention cards', detail: 'The briefing surfaces specific attention cards — actionable items flagged from the signal layer that require the manager\'s focus this week.' },
+      { label: 'Sentiment and alignment trendlines', detail: 'Each briefing shows sentiment and alignment averages tracked across 12 historical snapshots — so the manager sees whether things are improving or deteriorating, not just where they stand today.' },
+      { label: 'Leadership-level briefing', detail: 'A separate leadership briefing surface aggregates intelligence across all groups — giving CHROs and CEOs a cross-organisational view in the same format managers receive for their teams.' },
+      { label: 'New manager inheritance', detail: 'A new manager inherits the full briefing history, direct-report trajectories, and immediate attention priorities of their predecessor — so they start with context, not with guesswork.' },
+    ],
+    buyers: [
+      { role: 'Manager', value: 'A plain-language briefing every week that tells you what to notice, what to ask, and where to look — before the one-on-one, not after the damage.' },
+      { role: 'CHRO', value: 'Consistent, evidence-based management across every team — not dependent on manager instinct or the willingness to escalate.' },
+      { role: 'CEO', value: 'Management quality that scales with the organisation — so the 40th manager operates with the same intelligence as the first.' },
+    ],
+    metrics: [
+      { num: '1×', label: 'Weekly — before every meeting cycle' },
+      { num: '12', label: 'Briefing snapshots in trendline' },
+      { num: '✓', label: 'Human decides — AI briefs' },
+    ],
+  },
+  {
+    color: '#b83232',
+    icon: '⚙️',
+    num: '04',
+    name: 'Action & Remediation',
+    value: 'Move from insight to accountable follow-through — and document every step.',
+    desc: 'Intelligence without action is observation. Action without documentation is hope. Action and Remediation closes the loop from signal to case to owner to outcome — with a complete record of what was seen, what was done, and where nothing happened when something should have. The silence in an audit trail is often the most important entry in it. Every case has an owner, a plan, a timeline, and a check-in. If the action was taken, the record shows it. If it was promised and quietly abandoned, the record shows that too.',
+    pointers: [
+      { label: 'AI-suggested action plans', detail: 'When a case is opened, the AI generates a suggested action plan — owner, timeline, and specific steps. The manager reviews, modifies, and accepts. The judgment stays where it belongs.' },
+      { label: 'Case action forms and check-ins', detail: 'Every case has a structured action form and scheduled check-in — so follow-through is tracked, not assumed. If a check-in is missed, the system flags it.' },
+      { label: 'Audit log with retention policy', detail: 'A dedicated audit logger and retention script ensure the full record is preserved according to policy — not just logged, but retained in a form that is defensible and retrievable.' },
+      { label: 'SLA compliance tracking', detail: 'Cases can be tracked against SLA timelines — showing which interventions met policy requirements and which were overdue. The audit trail shows both.' },
+      { label: 'Engagement engine response', detail: 'When a signal is acted on, the response travels through the engagement engine — publicly, in the same feed the team uses. Leadership that responds publicly creates culture. Leadership that responds privately creates whispers.' },
+    ],
+    buyers: [
+      { role: 'CHRO', value: 'A complete record of every people intervention — demonstrating to the board, and to any future inquiry, that the organisation took its responsibilities seriously.' },
+      { role: 'Manager', value: 'AI-suggested action plans that give you a starting point, not a blank page — and a record that shows what you did when it mattered.' },
+      { role: 'HR / Legal', value: 'A timestamped audit trail of what was known, when it was known, and what was done about it — assembled continuously, not under pressure.' },
+    ],
+    metrics: [
+      { num: '100%', label: 'Cases logged with owner and timeline' },
+      { num: '0', label: 'Silent closures — every outcome recorded' },
+      { num: '↺', label: 'Loop closes back to the employee' },
+    ],
+  },
+  {
+    color: '#c47b1a',
+    icon: '🔍',
+    num: '05',
+    name: 'Knowledge Discovery',
+    value: 'Surface hidden patterns, expertise, blockers, and context that no formal system would ever capture.',
+    desc: 'Every organisation contains more intelligence than it knows. The knowledge champion who teaches without a title. The emerging leader carrying more than their role. The blocker quietly absorbing three people\'s energy for six weeks before it surfaces as a delay. The team that has found a way of working the rest of the organisation has not discovered yet. Knowledge Discovery surfaces these patterns from the signals — not from surveys, nominations, or management intuition, but from the work itself.',
+    pointers: [
+      { label: 'Organisational graph', detail: 'A dedicated graph surface maps who helps whom, who knowledge flows through, and how the organisation actually connects — not the org chart, but the living network.' },
+      { label: 'Helper routing', detail: 'When someone asks for help, the system can suggest the right helper and route the request — turning a blocker into a connection and making the routing visible to the team.' },
+      { label: 'Latent signal aggregation', detail: 'The latent aggregation job surfaces patterns that individual signals would never trigger — identifying emerging dynamics before they become visible through conventional means.' },
+      { label: 'Group trust signal', detail: 'The trust between a group and its manager is measured as a dedicated dimension — surfacing relational health issues that would otherwise only become visible through attrition or conflict.' },
+      { label: 'Signal insights library', detail: 'A dedicated signal-insights module processes and categorises signal patterns — making discovery systematic rather than dependent on a manager\'s attention and instinct.' },
+    ],
+    buyers: [
+      { role: 'CHRO', value: 'Identification of emerging leaders, knowledge champions, and unrecognised high performers — before they are noticed by a competitor.' },
+      { role: 'Manager', value: 'Visibility into hidden blockers, capacity imbalances, and team dynamics that would never surface in a status meeting.' },
+      { role: 'CEO', value: 'A live talent picture — who is ready for more, who is at risk, where the organisation\'s knowledge actually lives.' },
+    ],
+    metrics: [
+      { num: '5', label: 'Signal bands per post' },
+      { num: '∞', label: 'Patterns across time' },
+      { num: '0', label: 'Nominations required' },
+    ],
+  },
+  {
+    color: '#2d7a3a',
+    icon: '🧠',
+    num: '06',
+    name: 'Organisational Memory',
+    value: 'Preserve learning from signals, closed cases, decisions, and playbooks — so the organisation gets smarter every time anyone solves a problem.',
+    desc: 'Most organisations are remarkably good at solving the same problem twice. Not because they enjoy it — but because nobody captured what worked the first time. Organisational Memory closes the loop from signal to action to outcome to institutional knowledge. Every resolved case, every successful intervention, every documented decision becomes part of what the organisation knows about itself — searchable, reusable, and available to the next person who faces the same situation. The organisation that learns is not one where individuals get smarter. It is one where the system does.',
+    pointers: [
+      { label: 'Wiki / knowledge base', detail: 'A dedicated wiki surface captures resolved institutional knowledge — turning closed cases, repeated solutions, and documented decisions into a searchable knowledge base the whole organisation can access.' },
+      { label: 'Archive surface', detail: 'The archive stores the full history of signals, cases, outcomes, and interventions — queryable longitudinally so leaders can understand not just what is happening now but how it evolved.' },
+      { label: 'Playbook generation', detail: 'The large-context AI model can generate playbooks from archived cases — turning what worked in a specific situation into reusable guidance for the next manager who faces the same challenge.' },
+      { label: 'Value proof surface', detail: 'A dedicated admin surface measures whether PulseMeasurement is working — tracking whether interventions are reducing attrition, cases are being resolved, and signals are improving. The system holds itself accountable.' },
+      { label: 'Monthly reflection', detail: 'Each employee receives a private monthly narrative of their own contribution — the fair exchange for sharing honestly, and the signal that the system remembers what they said and what happened as a result.' },
+    ],
+    buyers: [
+      { role: 'CHRO', value: 'An organisation that accumulates wisdom rather than repeating mistakes — and retains that wisdom when people leave.' },
+      { role: 'Manager', value: 'When a new challenge arrives, precedents surface. You inherit the wisdom of every manager who faced the same situation before you.' },
+      { role: 'CEO', value: 'Core organisational strength that does not leave when a person does, does not stall when a strategy changes, and does not break when the world gets more complex.' },
+    ],
+    metrics: [
+      { num: '∞', label: 'Cases archived and searchable' },
+      { num: '↑', label: 'Intelligence compounds over time' },
+      { num: '1×', label: 'Each problem solved once' },
+    ],
+  },
+  {
+    color: '#374151',
+    icon: '🤖',
+    num: '07',
+    name: 'Agent-Ready Data',
+    value: 'Build the structured knowledge layer that future AI agents will need to act intelligently on behalf of your organisation.',
+    desc: 'The organisations that will benefit most from the next generation of AI agents are not the ones with the most data. They are the ones with the most structured, contextualised, trustworthy data. Every signal PulseMeasurement captures, every case it documents, every outcome it records is building a knowledge layer — tagged by role, context, time, and outcome — that future AI agents can reason over. PulseMeasurement is not just an intelligence system for today. It is the data architecture for tomorrow.',
+    pointers: [
+      { label: 'Signal extraction worker', detail: 'A dedicated background extraction worker produces consistently structured signal data — tagged by dimension, confidence, role context, and time — ready for any downstream reasoning system.' },
+      { label: '16D structured dimensions', detail: 'Every signal is scored across sixteen named dimensions with confidence levels — producing structured, labelled data that is far more useful to AI reasoning than raw text.' },
+      { label: 'Appraisal surface', detail: 'A dedicated appraisal surface uses longitudinal signal data to separate leader behaviour from team context — producing structured evidence that feeds human decisions today and agent reasoning tomorrow.' },
+      { label: 'Longitudinal history per person', detail: 'Every signal, case, action, and outcome is preserved in a longitudinal record per person and per group — giving AI agents the temporal context needed to reason about change, not just current state.' },
+      { label: 'Role-contextualised knowledge layer', detail: 'All data is tagged with role, group, and organisational context — ensuring that future AI agents can reason with the right frame, not just the right data.' },
+      { label: 'Multi-provider AI gateway', detail: 'PulseMeasurement runs on a multi-provider AI gateway supporting Anthropic, OpenAI, and local Ollama — with automatic fallback and tenant-level model configuration. For organisations with data residency requirements or existing AI procurement agreements, the intelligence layer works with the AI infrastructure they already have.' },
+    ],
+    buyers: [
+      { role: 'CTO / CDO', value: 'A structured, high-quality knowledge layer built from real work signals — the foundation that makes future AI agents genuinely useful rather than confidently wrong.' },
+      { role: 'CEO', value: 'Competitive advantage from institutional knowledge that compounds — the organisation that starts building this layer now is years ahead of the one that waits.' },
+      { role: 'CHRO', value: 'People intelligence that is machine-readable, role-contextualised, and continuously updated — ready for whatever AI capability comes next.' },
+    ],
+    metrics: [
+      { num: '16D', label: 'Structured signal dimensions' },
+      { num: '∞', label: 'Longitudinal history per person' },
+      { num: '→', label: 'Ready for AI agents' },
+    ],
+  },
+  {
+    color: '#0e7490',
+    icon: '💬',
+    num: '08',
+    name: 'AI Conversation Coach',
+    value: 'Help every team member surface what they actually mean — cultivating the honest signal at the point of creation.',
+    desc: 'The quality of everything PulseMeasurement produces depends entirely on the quality of the signal it receives. The AI Conversation Coach is what makes that signal honest. Left to a blank text box, a person will tell you they had a good week. Given a thoughtful conversation, they will tell you the truth. The coach does not direct the answer. It helps the employee find it — surfacing what was half-formed, shaping what was hesitant, and producing a signal that reflects what the person actually experienced, not what felt safe to say.',
+    pointers: [
+      { label: 'Compose-time coaching', detail: 'The AI coach engages with the employee at the moment of writing — not after the fact. It holds context, asks the right follow-up, and helps articulate what the employee means before the signal is submitted.' },
+      { label: 'Offered, not extracted', detail: 'The coach never directs the answer. Its role is to help the employee find what they already know — so the signal that arrives is genuinely theirs, not a response shaped by the system\'s expectations.' },
+      { label: 'High-volume low-latency model', detail: 'The coaching engine uses a fast, high-volume model optimised for real-time conversation — so the experience is responsive and natural, not slow or mechanical.' },
+      { label: 'Employee signal surface', detail: 'Each employee has their own signal surface — a private view of what they have shared, how it was received, and what happened as a result. The coach is the start of a loop that closes back to them.' },
+      { label: 'Trust architecture built in', detail: 'The coach operates within the trust architecture of the whole system — role-bounded, confidence-scored, and designed so the employee always knows what they are sharing and who can see it.' },
+      { label: 'Employee Copilot engine', detail: 'The conversation coach runs on a fast, high-volume AI model — the Employee Copilot engine — chosen specifically because responsiveness at compose time is what makes the conversation feel real rather than mechanical. The model that converses with 400 people on Monday morning cannot be the same model that writes a leadership narrative on Tuesday.' },
+    ],
+    buyers: [
+      { role: 'CHRO', value: 'Signals that reflect what people actually experience — not what they think is safe to say. The difference between a survey score and the truth.' },
+      { role: 'Employee', value: 'A weekly conversation that helps you articulate your contribution honestly — and a system that proves it was worth sharing.' },
+      { role: 'CEO', value: 'An organisation where honesty is structurally supported — not dependent on psychological safety that varies by manager and team.' },
+    ],
+    metrics: [
+      { num: '1', label: 'Question — open, unscripted' },
+      { num: '∞', label: 'Context held across the conversation' },
+      { num: '✓', label: 'Honest signal — not the safe one' },
+    ],
+  },
+  {
+    color: '#6d28d9',
+    icon: '🔮',
+    num: '09',
+    name: 'Intelligence Delivery',
+    value: 'Deliver the right intelligence to the right person at the point of need — from manager briefings to playbook generation to knowledge provisioning from the full signal history.',
+    desc: 'Intelligence that exists but never reaches the person who needs it is not intelligence. It is storage. Intelligence Delivery is the layer that takes everything PulseMeasurement knows — signals scored, cases resolved, patterns identified, knowledge archived — and makes it accessible at the moment it is needed. The manager briefing is one expression of this. The playbook generated from closed cases is another. The wiki query that surfaces a precedent from eighteen months ago is another. The AI agent that will reason over the full longitudinal record is the next one.',
+    pointers: [
+      { label: 'Large-context narrative generation', detail: 'The manager briefing and leadership narrative are generated by a large-context AI model — not a template filled with variables, but a genuine synthesis of the week\'s signals into plain-language intelligence.' },
+      { label: 'Playbook generation from archived cases', detail: 'The large-context model generates playbooks from closed cases — turning what worked in a specific situation into reusable guidance, delivered at the moment the next manager faces the same challenge.' },
+      { label: 'Wiki knowledge provisioning', detail: 'The wiki surface allows the AI to provision knowledge from the full signal and case history — answering queries in context, surfacing precedents, and making the organisation\'s accumulated intelligence accessible without a search.' },
+      { label: 'Signal insights library', detail: 'A dedicated signal-insights module processes patterns across the full signal history and provisions the relevant subset to whoever needs it — manager, leader, or HR — in the form most useful to their role.' },
+      { label: 'Knowledge at the point of need', detail: 'Intelligence Delivery is not a push system. It provisions knowledge contextually — to the manager before the one-on-one, to the CHRO before the board meeting, to the new manager who just inherited a team with a history.' },
+      { label: 'AI command chatbot', detail: 'A dedicated in-product conversational AI — protected by auth, rate-limited, and connected to the full signal layer — allows leaders and managers to query the organisation\'s intelligence in natural language. Not a search bar. A conversation with the data.' },
+      { label: 'Executive Intelligence engine', detail: 'Narrative generation, briefings, and playbooks are powered by the large-context Executive Intelligence engine — chosen specifically because depth, synthesis, and plain-language quality matter more than speed at this layer.' },
+    ],
+    buyers: [
+      { role: 'Manager', value: 'The knowledge you need, in the form you need it, before the moment you need to act — not buried in a dashboard you have to interpret under pressure.' },
+      { role: 'CHRO', value: 'An organisation where accumulated intelligence reaches the decision maker at the point of decision — not filed in a system nobody queries until something goes wrong.' },
+      { role: 'CTO / CDO', value: 'The delivery layer that makes structured signal data useful today — and positions it for AI agent reasoning tomorrow.' },
+    ],
+    metrics: [
+      { num: '2', label: 'AI models — fast and large-context' },
+      { num: '∞', label: 'Signal history available for provisioning' },
+      { num: '→', label: 'Right person, right moment, right form' },
+    ],
+  },
+  {
+    color: '#0369a1',
+    icon: '📣',
+    num: '10',
+    name: 'Mentions & Trends',
+    value: 'See who and what is being talked about across your organisation — and which themes are rising or falling over time.',
+    desc: 'Every organisation has a conversation happening beneath the formal structure. Topics that keep recurring. People who are mentioned consistently — positively or as a source of friction. Themes that are gaining momentum or quietly fading. Mentions and Trends surfaces this informal intelligence layer from the signal stream — giving leaders visibility into the organisational conversation that no survey, meeting, or management report would ever capture.',
+    pointers: [
+      { label: 'Mention tracking across signals', detail: 'People, projects, and topics mentioned across cadence posts are tracked and aggregated — showing who and what the organisation is talking about, not just what individuals report.' },
+      { label: 'Theme trend lines', detail: 'Topics and themes are tracked over time — showing which are rising in frequency, which are fading, and which have spiked suddenly in a way that warrants attention.' },
+      { label: 'Positive and friction signals', detail: 'Mentions are scored for sentiment — so a person mentioned frequently as a source of help registers differently from one mentioned as a source of friction. The distinction matters for action.' },
+      { label: 'Cross-team pattern detection', detail: 'Trends are visible at team level and organisational level simultaneously — so a theme emerging in one team can be identified before it spreads, or a best practice in one team can be amplified across others.' },
+      { label: 'Leading indicator layer', detail: 'Trends in the informal conversation often precede formal signals by weeks. A topic rising in mentions before it appears in a formal concern is the earliest possible warning — and the widest possible window to act.' },
+    ],
+    buyers: [
+      { role: 'CHRO', value: 'Visibility into the informal organisational conversation — the topics, people, and themes that formal systems never surface until they become a problem.' },
+      { role: 'CEO', value: 'A live pulse on what the organisation is actually talking about — not what is reported upward, but what is recurring in the work itself.' },
+      { role: 'Manager', value: 'Early sight of themes emerging in your team that no one has formally raised yet — the signal before the concern.' },
+    ],
+    metrics: [
+      { num: '∞', label: 'Mentions tracked across all signals' },
+      { num: '↑↓', label: 'Rising and falling trends visible' },
+      { num: '≠', label: 'Positive vs friction sentiment separated' },
+    ],
+  },
+  {
+    color: '#0f766e',
+    icon: '🔗',
+    num: '11',
+    name: 'Teams & Email Integration',
+    value: 'Meet people where they already are — capturing honest signals without asking anyone to adopt a new tool or change an existing habit.',
+    desc: 'The most common reason people intelligence systems fail is not the intelligence. It is the adoption. A new platform requires a new login, a new habit, and a new reason to engage — added to a workday that is already full. Teams and Email Integration removes this barrier entirely. The weekly cadence prompt arrives in Microsoft Teams or directly in email — where the team already is. The signal is captured without a new application, a new password, or a new workflow. The intelligence layer runs invisibly behind surfaces the team already trusts.',
+    pointers: [
+      { label: 'Microsoft Teams integration', detail: 'The weekly cadence prompt is delivered directly in Teams — as a bot message in the individual\'s channel. The employee responds in Teams. The signal is captured and processed without leaving the application they use all day.' },
+      { label: 'Email delivery and capture', detail: 'For organisations where Teams is not the primary surface, the cadence prompt is delivered by email. The employee replies to the email. The signal is captured, scored, and fed into the intelligence layer automatically.' },
+      { label: 'Zero new application required', detail: 'Managers receive their briefings, leaders access their dashboards, and employees submit their signals — all through existing tools. PulseMeasurement runs as an intelligence layer, not as a destination.' },
+      { label: 'Adoption without change management', detail: 'Because the prompt meets people where they are, cadence compliance is dramatically higher than systems requiring a new login. The signal pool is richer from day one — and the intelligence is more reliable as a result.' },
+      { label: 'Notification routing through existing channels', detail: 'Case notifications, recognition, help routing, and manager briefing alerts are all delivered through the team\'s existing communication channels — so nothing requires a separate notification to be checked.' },
+    ],
+    buyers: [
+      { role: 'CHRO', value: 'High cadence compliance from day one — because the prompt meets people where they are rather than asking them to come to it.' },
+      { role: 'CEO', value: 'A system that delivers organisation-wide intelligence without requiring organisation-wide behaviour change. The ROI begins immediately.' },
+      { role: 'IT / CTO', value: 'An integration architecture that works with existing Microsoft 365 and email infrastructure — no new security perimeter, no new data boundary, no new application to manage.' },
+    ],
+    metrics: [
+      { num: '0', label: 'New applications required' },
+      { num: '↑', label: 'Higher cadence compliance vs standalone apps' },
+      { num: '2', label: 'Primary channels — Teams and email' },
+    ],
+  },
+];
+
+// Build pillar grid
+const grid = document.getElementById('pillars-grid');
+PILLARS.forEach((p, i) => {
+  const col = document.createElement('div');
+  col.className = 'pillar-col' + (i === 0 ? ' active' : '');
+  col.dataset.pillar = i;
+  col.innerHTML = `
+    <div class="pillar-bar" style="background:${p.color}"></div>
+    <div class="pillar-top">
+      <div class="pillar-num">${p.num}</div>
+      <div class="pillar-icon" style="background:${p.color}22;color:${p.color}">${p.icon}</div>
+      <div class="pillar-name">${p.name}</div>
+    </div>
+    <div class="pillar-bottom">
+      <div class="pillar-value">${p.value}</div>
+    </div>`;
+  col.addEventListener('click', () => selectPillar(i));
+  grid.appendChild(col);
+});
+
+// Build detail panels
+const container = document.getElementById('detail-container');
+PILLARS.forEach((p, i) => {
+  const panel = document.createElement('div');
+  panel.className = 'detail-panel' + (i === 0 ? ' active' : '');
+  panel.dataset.pillar = i;
+
+  const left = document.createElement('div');
+  left.className = 'detail-left';
+
+  const eyebrow = document.createElement('div');
+  eyebrow.className = 'detail-eyebrow';
+  eyebrow.innerHTML = `<span class="detail-num">${p.num} / 07</span><span class="detail-badge" style="background:${p.color}18;color:${p.color}">${p.name}</span>`;
+  left.appendChild(eyebrow);
+
+  const h2 = document.createElement('h2');
+  h2.className = 'detail-h2';
+  h2.style.color = 'var(--navy)';
+  const parts = p.name.split(' ');
+  h2.innerHTML = parts.length > 1 ? parts.slice(0,-1).join(' ') + ' <em>' + parts.slice(-1)[0] + '</em>' : p.name;
+  left.appendChild(h2);
+
+  const val = document.createElement('div');
+  val.className = 'detail-value';
+  val.style.borderColor = p.color;
+  val.textContent = p.value;
+  left.appendChild(val);
+
+  const desc = document.createElement('div');
+  desc.className = 'detail-desc';
+  desc.textContent = p.desc;
+  left.appendChild(desc);
+
+  const metrics = document.createElement('div');
+  metrics.className = 'detail-metrics';
+  p.metrics.forEach(m => {
+    const mc = document.createElement('div');
+    mc.className = 'metric-card';
+    mc.innerHTML = `<div class="metric-num" style="color:${p.color}">${m.num}</div><div class="metric-label">${m.label}</div>`;
+    metrics.appendChild(mc);
+  });
+  left.appendChild(metrics);
+
+  // Pointers
+  if (p.pointers && p.pointers.length) {
+    const ptitle = document.createElement('div');
+    ptitle.style.cssText = 'font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:20px;margin-bottom:0';
+    ptitle.textContent = 'What this includes';
+    left.appendChild(ptitle);
+    const pointers = document.createElement('div');
+    pointers.className = 'pointers';
+    p.pointers.forEach(pt => {
+      const item = document.createElement('div');
+      item.className = 'pointer-item';
+      const header = document.createElement('div');
+      header.className = 'pointer-header';
+      const lbl = document.createElement('div');
+      lbl.className = 'pointer-label';
+      lbl.style.color = p.color;
+      lbl.textContent = pt.label;
+      const chev = document.createElement('span');
+      chev.className = 'pointer-chevron';
+      chev.textContent = '▾';
+      header.appendChild(lbl);
+      header.appendChild(chev);
+      const detail = document.createElement('div');
+      detail.className = 'pointer-detail';
+      detail.textContent = pt.detail;
+      item.appendChild(header);
+      item.appendChild(detail);
+      item.addEventListener('click', () => item.classList.toggle('open'));
+      pointers.appendChild(item);
+    });
+    left.appendChild(pointers);
+  }
+
+  const right = document.createElement('div');
+  right.className = 'detail-right';
+
+  const cards = document.createElement('div');
+  cards.className = 'buyer-cards';
+  p.buyers.forEach(b => {
+    const card = document.createElement('div');
+    card.className = 'buyer-card';
+    card.style.borderTop = `3px solid ${p.color}`;
+    const role = document.createElement('div');
+    role.className = 'buyer-role';
+    role.style.color = p.color;
+    role.textContent = b.role;
+    const value = document.createElement('div');
+    value.className = 'buyer-value';
+    value.textContent = b.value;
+    card.appendChild(role);
+    card.appendChild(value);
+    cards.appendChild(card);
+  });
+  right.appendChild(cards);
+
+  panel.appendChild(left);
+  panel.appendChild(right);
+  container.appendChild(panel);
+});
+
+// Build summary table
+const tbody = document.getElementById('summary-tbody');
+PILLARS.forEach((p, i) => {
+  const primaryBuyer = p.buyers[0].role;
+  const allRoles = p.buyers.map(b => b.role).join(' · ');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">${p.num}</td>
+    <td><span class="pillar-tag"><span class="pillar-dot" style="background:${p.color}"></span>${p.name}</span></td>
+    <td style="color:var(--muted)">${p.value}</td>
+    <td style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace">${allRoles}</td>`;
+  tbody.appendChild(tr);
+});
+
+function selectPillar(i) {
+  // Update grid
+  document.querySelectorAll('.pillar-col').forEach((col, j) => col.classList.toggle('active', j === i));
+  // Update detail panels
+  document.querySelectorAll('.detail-panel').forEach((panel, j) => panel.classList.toggle('active', j === i));
+  // Update nav buttons
+  document.querySelectorAll('.pillar-nav-btn').forEach((btn, j) => {
+    btn.classList.toggle('active', j === i);
+    btn.style.borderColor = j === i ? PILLARS[i].color : 'rgba(255,255,255,.12)';
+    btn.style.color = j === i ? 'white' : 'rgba(255,255,255,.55)';
+  });
+  // Scroll to detail
+  document.querySelector('.detail-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+  </section>
+
+  <section id="demo" class="block">
+    <div class="wrap">
+      <span class="eyebrow">Book a demo</span>
+      <h2 style="margin-top:20px;">See PulseMeasurement on the problem that matters most to you.</h2>
+      <p class="section-copy">The demo is a conversation, not a presentation. Tell us your role and the question you most need answered. We will take it from there.</p>
+
+      <div style="margin-top:40px;padding:32px;background:var(--soft);border-radius:12px;border:1px solid var(--line);">
+        <span class="eyebrow" style="margin-bottom:16px;display:inline-flex;">What we are not</span>
+        <p style="margin-top:16px;font-size:15px;color:var(--ink);line-height:1.7;max-width:760px;">Every existing people intelligence tool is a motivation-based system. Each one asks for honesty through a different channel — the survey, the management hierarchy, the exit interview — without providing a formal mechanism through which honesty is structurally safe to give. Employees are not short of things they want to say. They are short of a procedure that makes saying them worth the risk.</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px;">
+          <div style="padding:20px;background:white;border-radius:8px;border:1px solid var(--line);">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#A32D2D;margin-bottom:8px;">The Annual Survey</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.6;">Asks for honesty with no individual path from concern to action. Nobody can point to a specific thing that changed because of what they personally said. The loop never closes.</div>
+          </div>
+          <div style="padding:20px;background:white;border-radius:8px;border:1px solid var(--line);">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#A32D2D;margin-bottom:8px;">The Management Hierarchy</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.6;">The manager is both the channel and the gatekeeper. Speaking carries career risk. Staying silent carries none. Without a formal procedure, the rational calculation favours silence.</div>
+          </div>
+          <div style="padding:20px;background:white;border-radius:8px;border:1px solid var(--line);">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#A32D2D;margin-bottom:8px;">The Exit Interview</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.6;">The richest signal of all — delivered by someone with nothing left to lose. The procedure finally works. The organisation finally learns what it needed to know. Currency: zero.</div>
+          </div>
+        </div>
+        <p style="margin-top:24px;font-size:15px;font-weight:600;color:var(--ink);line-height:1.6;max-width:760px;">PulseMeasurement is a formal procedure. A weekly mechanism — open to every employee, structured by an AI coach, logged in a case system, assigned to an owner, tracked to a timeline, and returned to the person who raised it. Not a cultural ask. A mechanism that works.</p>
+      </div>
+
+      <div style="margin-top:32px;">
+        <a class="button teal" href="mailto:demo@pulsemeasurement.com" style="display:inline-block;padding:14px 32px;background:var(--teal);color:#fff;border-radius:6px;font-size:15px;font-weight:600;text-decoration:none;letter-spacing:.01em;">Request a demo</a>
+      </div>
+    </div>
+  </section>
+  <footer style="background:var(--navy);color:rgba(255,255,255,0.6);padding:48px 0;">
+    <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;">
+      <div>
+        <a class="brand" href="#home" style="color:white;"><span class="mark">PM</span><span>PulseMeasurement</span><span class="beta-badge">β Beta</span></a>
+        <p style="margin-top:12px;font-size:14px;max-width:380px;line-height:1.7;">Not a cultural campaign. A formal procedure — with an owner, a timeline, a case record, and a closed loop back to the person who raised it.</p>
+      </div>
+      <div style="display:flex;gap:32px;font-size:14px;font-weight:700;">
+        <a href="#functionality" style="color:rgba(255,255,255,0.6);">How it works</a>
+        <a href="#technology" style="color:rgba(255,255,255,0.6);">Trust &amp; security</a>
+        <a href="#use-cases" style="color:rgba(255,255,255,0.6);">Use cases</a>
+        <a href="#value-proposition" style="color:rgba(255,255,255,0.6);">Value proposition</a>
+        <a href="rich-information-at-scale.html" style="color:rgba(255,255,255,0.6);">Resources</a>
+        <a href="#demo" style="color:rgba(255,255,255,0.6);">Book a demo</a>
+      </div>
+    </div>
+    <div class="wrap" style="margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.1);font-size:13px;">
+      © 2025 PulseMeasurement. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>
