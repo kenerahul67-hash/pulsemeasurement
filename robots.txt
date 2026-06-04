@@ -1,4 +1,23 @@
 User-agent: *
 Allow: /
 
+# AI discovery and answer engine crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Omgilibot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
 Sitemap: https://pulsemeasurement.com/sitemap.xml
