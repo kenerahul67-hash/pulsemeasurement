@@ -1,26 +1,34 @@
+# Standard Crawlers
 User-agent: *
 Allow: /
+Disallow: /wp-admin/
 
-# AI discovery and answer engine crawlers
+# Explicitly ensure AI Discovery Engines can crawl and cite content
 User-agent: GPTBot
 Allow: /
 
+# ChatGPT Real-time Search
 User-agent: ChatGPT-User
 Allow: /
 
+# Claude / Anthropic Crawler
 User-agent: ClaudeBot
 Allow: /
 
+# Perplexity Engine
 User-agent: PerplexityBot
 Allow: /
 
 User-agent: Omgilibot
 Allow: /
 
+# Apple Intelligence Engine
 User-agent: Applebot-Extended
 Allow: /
 
+# Common Crawl, used to train multiple AI foundation models
 User-agent: CCBot
 Allow: /
 
+# XML Sitemap Location
 Sitemap: https://pulsemeasurement.com/sitemap.xml

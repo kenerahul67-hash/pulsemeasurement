@@ -22,6 +22,7 @@ jobs:
         run: |
           mkdir -p dist
           cp *.html staticwebapp.config.json robots.txt sitemap.xml dist/
+          cp -r assets dist/
 
       - name: Deploy with Azure Static Web Apps CLI
         env:

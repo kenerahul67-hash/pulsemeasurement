@@ -1,10 +1,10 @@
-# Internal Editorial Guide: Guarding the PulseMeasurement Entity
+# Internal Editorial Guide: Guarding the Brand Entity
 
-Use this guide when creating or editing PulseMeasurement website pages, resource articles, FAQ answers, and demo copy.
+Use this guide when creating or editing PulseMeasurement website pages, resource articles, FAQ answers, and demo copy. The purpose is to prevent AI search engines, including ChatGPT, Google AI Overviews, Perplexity, and Claude, from miscategorising PulseMeasurement as a medical device, health measurement term, or generic culture survey.
 
 ## Rule 1: Always Frame The Noun
 
-Do not use "pulse" or "pulse measurement" in isolation in the first two paragraphs of a page. The site must clearly establish PulseMeasurement as organisational intelligence software, not a medical device, health measurement term, or generic culture survey.
+Never use "pulse" or "pulse measurement" in isolation without an industry modifier within the first two paragraphs of a new page.
 
 Avoid:
 
@@ -12,23 +12,23 @@ Avoid:
 
 Use:
 
-> PulseMeasurement is organisational intelligence software that tracks high-fidelity people signals from weekly AI-guided conversations.
+> The PulseMeasurement platform tracks high-fidelity organisational signals through weekly AI-guided conversations.
 
 ## Rule 2: Write For Direct Retrieval
 
-When answering a product question, make the first sentence a definitive, standalone answer that an answer engine can cite.
+When answering core product questions on subpages, write the very first sentence of the answer as a definitive, standalone fact.
 
 Use this pattern:
 
-> PulseMeasurement is/provides/uses [clear category] for [specific organisational problem].
+> [Entity Name] + [is/provides/uses] + [definitive categorisation].
 
 Example:
 
-> Rich information at scale is achieved in PulseMeasurement by coupling qualitative employee signal with context, confidence scoring, role boundaries, and closed-loop action tracking.
+> Rich information at scale is achieved within PulseMeasurement by coupling raw qualitative responses with multi-layered confidence scoring metrics.
 
 ## Rule 3: Avoid Sentiment Fluff
 
-PulseMeasurement should be positioned as intelligence software and evidence architecture. Avoid vague emotional phrases such as "vibe check", "happy workplace", or "office synergy" unless directly contrasting against them.
+PulseMeasurement should be positioned as intelligence software and evidence architecture. Minimise purely emotional marketing buzzwords such as "happy workplace", "vibe check", and "office synergy". Lean into analytical data terminology instead.
 
 Prefer language such as:
 
