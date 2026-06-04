@@ -21,7 +21,7 @@ jobs:
       - name: Prepare static artifact
         run: |
           mkdir -p dist
-          cp index.html staticwebapp.config.json dist/
+          cp *.html staticwebapp.config.json dist/
 
       - name: Deploy with Azure Static Web Apps CLI
         env:

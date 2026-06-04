@@ -266,59 +266,13 @@
       h2 { font-size: 26px; }
       .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
     }
-
-    /* BETA BANNER */
-    .beta-banner {
-      background: repeating-linear-gradient(-45deg,#0f1e3c,#0f1e3c 10px,#0d1829 10px,#0d1829 20px);
-      color: rgba(255,255,255,0.75);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-align: center;
-      padding: 8px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      border-bottom: 1px solid rgba(13,148,136,0.3);
-    }
-    .beta-banner .beta-pill {
-      background: var(--teal);
-      color: white;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 999px;
-    }
-    .beta-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(13,148,136,0.12);
-      border: 1px solid rgba(13,148,136,0.35);
-      color: var(--teal);
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 999px;
-      vertical-align: middle;
-      margin-left: 8px;
-    }
   </style>
 </head>
 <body>
-  <div class="beta-banner" role="banner">
-    <span class="beta-pill">Beta</span>
-    <span>This is a pre-release version of the PulseMeasurement website — content and design are being actively refined.</span>
-  </div>
   <header class="topbar">
     <div class="wrap nav">
       <div style="display:flex;flex-direction:column;gap:2px;">
-        <a class="brand" href="#home"><span class="mark">PM</span><span>PulseMeasurement</span><span class="beta-badge">β Beta</span></a>
+        <a class="brand" href="#home"><span class="mark">PM</span><span>PulseMeasurement</span></a>
         <span style="font-size:11px;color:var(--muted);font-style:italic;padding-left:4px;">We tell you what is growing before it blooms — and what is breaking before it fails.</span>
       </div>
       <nav class="links" aria-label="Website sections">
@@ -1599,7 +1553,7 @@ function selectPillar(i) {
   <footer style="background:var(--navy);color:rgba(255,255,255,0.6);padding:48px 0;">
     <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;">
       <div>
-        <a class="brand" href="#home" style="color:white;"><span class="mark">PM</span><span>PulseMeasurement</span><span class="beta-badge">β Beta</span></a>
+        <a class="brand" href="#home" style="color:white;"><span class="mark">PM</span><span>PulseMeasurement</span></a>
         <p style="margin-top:12px;font-size:14px;max-width:380px;line-height:1.7;">Not a cultural campaign. A formal procedure — with an owner, a timeline, a case record, and a closed loop back to the person who raised it.</p>
       </div>
       <div style="display:flex;gap:32px;font-size:14px;font-weight:700;">
@@ -1617,4 +1571,3 @@ function selectPillar(i) {
   </footer>
 </body>
 </html>
-<!-- deploy -->
