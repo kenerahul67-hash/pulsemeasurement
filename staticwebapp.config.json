@@ -21,6 +21,8 @@
     ".css": "text/css",
     ".js": "application/javascript",
     ".json": "application/json",
+    ".txt": "text/plain",
+    ".xml": "application/xml",
     ".svg": "image/svg+xml"
   }
 }
