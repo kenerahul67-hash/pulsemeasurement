@@ -1531,7 +1531,7 @@ function selectPillar(i) {
     <div class="wrap">
       <span class="eyebrow">Guided demo</span>
       <h2 style="margin-top:20px;">Choose the question you want PulseMeasurement to answer.</h2>
-      <p class="section-copy">Pick one or more board, CHRO, CEO, or manager questions. The demo opens with the matching use-case journey, and the AI guide walks through the screens, evidence, action path, and talk track for that question.</p>
+      <p class="section-copy">Pick one or more board, CHRO, CEO, or manager questions and tell us who should receive the walkthrough. We will email a guided demo link with the use-case summary; the link opens the demo instance with your details and starts the AI guide on the selected journey.</p>
 
       <style>
         .demo-picker { margin-top: 32px; border: 1px solid var(--line); border-radius: 12px; background: white; padding: 24px; }
@@ -1543,12 +1543,16 @@ function selectPillar(i) {
         .demo-question-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--teal); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
         .demo-question-meta em { color: var(--muted); font-style: normal; font-size: 11px; letter-spacing: .04em; text-align: right; }
         .demo-question-text { color: var(--ink); font-size: 15px; font-weight: 800; line-height: 1.45; }
+        .demo-contact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }
         .demo-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 24px; }
         .demo-selected { color: var(--muted); font-size: 13px; font-weight: 700; }
-        @media (max-width: 700px) { .demo-picker { padding: 16px; } .demo-question-card { min-height: auto; } }
+        .demo-status { color: var(--muted); font-size: 13px; font-weight: 700; }
+        .demo-status.success { color: #0b756b; }
+        .demo-status.error { color: #b42318; }
+        @media (max-width: 700px) { .demo-picker { padding: 16px; } .demo-question-card { min-height: auto; } .demo-contact-grid { grid-template-columns: 1fr; } }
       </style>
 
-      <div class="demo-picker" data-demo-app-url="https://beta.pulsemeasurement.com/today">
+      <form class="demo-picker" data-demo-request-url="https://beta.pulsemeasurement.com/api/demo/request">
         <div class="demo-question-grid" aria-label="Demo questions">
           <label class="demo-question-card">
             <input type="checkbox" name="demo-use-case" value="UC-01" data-question="Can we see sustained friction before resignation risk hardens?" />
@@ -1626,13 +1630,31 @@ function selectPillar(i) {
             <span class="demo-question-text">Can the organisation intervene before formal escalation?</span>
           </label>
         </div>
+        <div class="demo-contact-grid">
+          <label>Name
+            <input type="text" name="name" autocomplete="name" required placeholder="Your name" />
+          </label>
+          <label>Work email
+            <input type="email" name="email" autocomplete="email" required placeholder="you@company.com" />
+          </label>
+          <label>Company
+            <input type="text" name="company" autocomplete="organization" placeholder="Company name" />
+          </label>
+          <label>Role
+            <input type="text" name="role" autocomplete="organization-title" placeholder="CEO, CHRO, COO, manager..." />
+          </label>
+          <label class="span-2">Message
+            <textarea name="message" placeholder="Tell us what you want the demo to answer, or the situation you are evaluating."></textarea>
+          </label>
+        </div>
         <div class="demo-actions">
-          <button class="button teal" type="button" id="launch-demo-question">Launch guided demo</button>
+          <button class="button teal" type="submit" id="launch-demo-question">Email guided demo link</button>
           <button class="button" type="button" id="clear-demo-questions">Clear</button>
           <a class="button" href="mailto:demo@pulsemeasurement.com">Request a live walkthrough</a>
-          <span class="demo-selected" id="demo-selected-count">Select a question to launch the guide.</span>
+          <span class="demo-selected" id="demo-selected-count">Select a question to request the guide.</span>
         </div>
-      </div>
+        <p class="demo-status" id="demo-request-status" aria-live="polite"></p>
+      </form>
     </div>
     <script>
       (function () {
@@ -1642,7 +1664,8 @@ function selectPillar(i) {
         const launch = document.getElementById('launch-demo-question');
         const clear = document.getElementById('clear-demo-questions');
         const selected = document.getElementById('demo-selected-count');
-        const baseUrl = picker.dataset.demoAppUrl || 'https://beta.pulsemeasurement.com/today';
+        const status = document.getElementById('demo-request-status');
+        const requestUrl = picker.dataset.demoRequestUrl || 'https://beta.pulsemeasurement.com/api/demo/request';
 
         function checkedItems() {
           return checkboxes.filter((box) => box.checked);
@@ -1651,28 +1674,56 @@ function selectPillar(i) {
         function updateSelectedText() {
           const items = checkedItems();
           selected.textContent = items.length === 0
-            ? 'Select a question to launch the guide.'
+            ? 'Select a question to request the guide.'
             : items.length === 1
               ? items[0].value + ' selected.'
-              : items.length + ' questions selected. The demo will start with ' + items[0].value + '.';
+              : items.length + ' questions selected. The emailed demo will start with ' + items[0].value + '.';
+        }
+
+        function setStatus(message, kind) {
+          status.textContent = message;
+          status.className = 'demo-status' + (kind ? ' ' + kind : '');
         }
 
         checkboxes.forEach((box) => box.addEventListener('change', updateSelectedText));
         clear.addEventListener('click', () => {
           checkboxes.forEach((box) => { box.checked = false; });
+          picker.reset();
+          setStatus('', '');
           updateSelectedText();
         });
-        launch.addEventListener('click', () => {
+        picker.addEventListener('submit', async (event) => {
+          event.preventDefault();
           const items = checkedItems();
           if (items.length === 0) {
             checkboxes[0].focus();
+            setStatus('Select at least one question first.', 'error');
             return;
           }
-          const url = new URL(baseUrl);
-          url.searchParams.set('useCase', items[0].value);
-          url.searchParams.set('source', 'website');
-          if (items.length > 1) url.searchParams.set('queue', items.map((item) => item.value).join(','));
-          window.location.href = url.toString();
+          const formData = new FormData(picker);
+          const payload = {
+            name: String(formData.get('name') || '').trim(),
+            email: String(formData.get('email') || '').trim(),
+            company: String(formData.get('company') || '').trim(),
+            role: String(formData.get('role') || '').trim(),
+            message: String(formData.get('message') || '').trim(),
+            useCases: items.map((item) => item.value),
+          };
+          launch.setAttribute('disabled', 'disabled');
+          setStatus('Sending your guided demo link...', '');
+          try {
+            const response = await fetch(requestUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            });
+            if (!response.ok) throw new Error('request_failed');
+            setStatus('Done. Check your email for the guided demo link and use-case summary.', 'success');
+          } catch (error) {
+            setStatus('We could not send the demo link just now. Please email demo@pulsemeasurement.com and we will send it manually.', 'error');
+          } finally {
+            launch.removeAttribute('disabled');
+          }
         });
         updateSelectedText();
       })();
