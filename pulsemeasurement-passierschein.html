@@ -25,6 +25,7 @@
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 88px; }
     body {
       margin: 0;
       background: var(--paper);
@@ -1674,6 +1675,25 @@ function selectPillar(i) {
           window.location.href = url.toString();
         });
         updateSelectedText();
+      })();
+    </script>
+    <script>
+      (function () {
+        function scrollToCurrentHash() {
+          if (!window.location.hash) return;
+          var target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+          if (!target) return;
+          var headerOffset = 88;
+          var top = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+          window.scrollTo({ top: top, behavior: 'auto' });
+        }
+
+        window.addEventListener('load', function () {
+          window.setTimeout(scrollToCurrentHash, 120);
+        });
+        window.addEventListener('hashchange', function () {
+          window.setTimeout(scrollToCurrentHash, 0);
+        });
       })();
     </script>
   </section>
