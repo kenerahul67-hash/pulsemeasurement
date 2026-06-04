@@ -1573,34 +1573,154 @@ function selectPillar(i) {
 
   <section id="demo" class="block">
     <div class="wrap">
-      <span class="eyebrow">Book a demo</span>
-      <h2 style="margin-top:20px;">See PulseMeasurement on the problem that matters most to you.</h2>
-      <p class="section-copy">The demo is a conversation, not a presentation. Tell us your role and the question you most need answered. We will take it from there.</p>
+      <span class="eyebrow">Guided demo</span>
+      <h2 style="margin-top:20px;">Choose the question you want PulseMeasurement to answer.</h2>
+      <p class="section-copy">Pick one or more board, CHRO, CEO, or manager questions. The demo opens with the matching use-case journey, and the AI guide walks through the screens, evidence, action path, and talk track for that question.</p>
 
-      <div style="margin-top:40px;padding:32px;background:var(--soft);border-radius:12px;border:1px solid var(--line);">
-        <span class="eyebrow" style="margin-bottom:16px;display:inline-flex;">What we are not</span>
-        <p style="margin-top:16px;font-size:15px;color:var(--ink);line-height:1.7;max-width:760px;">Every existing people intelligence tool is a motivation-based system. Each one asks for honesty through a different channel — the survey, the management hierarchy, the exit interview — without providing a formal mechanism through which honesty is structurally safe to give. Employees are not short of things they want to say. They are short of a procedure that makes saying them worth the risk.</p>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px;">
-          <div style="padding:20px;background:white;border-radius:8px;border:1px solid var(--line);">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#A32D2D;margin-bottom:8px;">The Annual Survey</div>
-            <div style="font-size:13px;color:var(--muted);line-height:1.6;">Asks for honesty with no individual path from concern to action. Nobody can point to a specific thing that changed because of what they personally said. The loop never closes.</div>
-          </div>
-          <div style="padding:20px;background:white;border-radius:8px;border:1px solid var(--line);">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#A32D2D;margin-bottom:8px;">The Management Hierarchy</div>
-            <div style="font-size:13px;color:var(--muted);line-height:1.6;">The manager is both the channel and the gatekeeper. Speaking carries career risk. Staying silent carries none. Without a formal procedure, the rational calculation favours silence.</div>
-          </div>
-          <div style="padding:20px;background:white;border-radius:8px;border:1px solid var(--line);">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#A32D2D;margin-bottom:8px;">The Exit Interview</div>
-            <div style="font-size:13px;color:var(--muted);line-height:1.6;">The richest signal of all — delivered by someone with nothing left to lose. The procedure finally works. The organisation finally learns what it needed to know. Currency: zero.</div>
-          </div>
+      <style>
+        .demo-picker { margin-top: 32px; border: 1px solid var(--line); border-radius: 12px; background: white; padding: 24px; }
+        .demo-question-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+        .demo-question-card { cursor: pointer; display: grid; gap: 10px; min-height: 148px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); padding: 16px; transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease; }
+        .demo-question-card:hover { border-color: var(--teal); box-shadow: 0 8px 20px rgba(15,30,60,.08); transform: translateY(-1px); }
+        .demo-question-card input { width: 18px; height: 18px; accent-color: var(--teal); }
+        .demo-question-card:has(input:checked) { border-color: var(--teal); background: #eefaf7; box-shadow: 0 0 0 2px rgba(13,148,136,.12); }
+        .demo-question-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--teal); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+        .demo-question-meta em { color: var(--muted); font-style: normal; font-size: 11px; letter-spacing: .04em; text-align: right; }
+        .demo-question-text { color: var(--ink); font-size: 15px; font-weight: 800; line-height: 1.45; }
+        .demo-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 24px; }
+        .demo-selected { color: var(--muted); font-size: 13px; font-weight: 700; }
+        @media (max-width: 700px) { .demo-picker { padding: 16px; } .demo-question-card { min-height: auto; } }
+      </style>
+
+      <div class="demo-picker" data-demo-app-url="https://beta.pulsemeasurement.com/today">
+        <div class="demo-question-grid" aria-label="Demo questions">
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-01" data-question="Can we see sustained friction before resignation risk hardens?" />
+            <span class="demo-question-meta"><strong>UC-01</strong><em>Early warning</em></span>
+            <span class="demo-question-text">Can we see sustained friction before resignation risk hardens?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-02" data-question="Can we see capacity strain before burnout becomes visible failure?" />
+            <span class="demo-question-meta"><strong>UC-02</strong><em>Capacity</em></span>
+            <span class="demo-question-text">Can we see capacity strain before burnout becomes visible failure?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-03" data-question="Can blockers surface before they become delivery failure?" />
+            <span class="demo-question-meta"><strong>UC-03</strong><em>Blockers</em></span>
+            <span class="demo-question-text">Can blockers surface before they become delivery failure?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-04" data-question="Can managers be prepared before one-on-ones?" />
+            <span class="demo-question-meta"><strong>UC-04</strong><em>Manager briefing</em></span>
+            <span class="demo-question-text">Can managers be prepared before one-on-ones?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-05" data-question="Can a new manager inherit context quickly?" />
+            <span class="demo-question-meta"><strong>UC-05</strong><em>Manager transition</em></span>
+            <span class="demo-question-text">Can a new manager inherit context quickly?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-06" data-question="Can leadership see whether management quality is consistent?" />
+            <span class="demo-question-meta"><strong>UC-06</strong><em>Management quality</em></span>
+            <span class="demo-question-text">Can leadership see whether management quality is consistent?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-07" data-question="Did strategy reach team-level work?" />
+            <span class="demo-question-meta"><strong>UC-07</strong><em>Strategy cascade</em></span>
+            <span class="demo-question-text">Did strategy reach team-level work?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-08" data-question="Are goals healthy, drifting, or unsupported?" />
+            <span class="demo-question-meta"><strong>UC-08</strong><em>Goal health</em></span>
+            <span class="demo-question-text">Are goals healthy, drifting, or unsupported?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-09" data-question="Can we replace snapshot surveys with continuous signal?" />
+            <span class="demo-question-meta"><strong>UC-09</strong><em>Continuous signal</em></span>
+            <span class="demo-question-text">Can we replace snapshot surveys with continuous signal?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-10" data-question="Can leaders see board-ready organisational health?" />
+            <span class="demo-question-meta"><strong>UC-10</strong><em>Board health</em></span>
+            <span class="demo-question-text">Can leaders see board-ready organisational health?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-11" data-question="Can we see integration risk by group, location, or cohort?" />
+            <span class="demo-question-meta"><strong>UC-11</strong><em>Integration risk</em></span>
+            <span class="demo-question-text">Can we see integration risk by group, location, or cohort?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-12" data-question="Can we prove what happened after a signal?" />
+            <span class="demo-question-meta"><strong>UC-12</strong><em>Audit trail</em></span>
+            <span class="demo-question-text">Can we prove what happened after a signal?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-13" data-question="Can we separate context, actions, and outcomes over time?" />
+            <span class="demo-question-meta"><strong>UC-13</strong><em>Accountability</em></span>
+            <span class="demo-question-text">Can we separate context, actions, and outcomes over time?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-14" data-question="Can we see whether follow-up obligations are being met?" />
+            <span class="demo-question-meta"><strong>UC-14</strong><em>SLA compliance</em></span>
+            <span class="demo-question-text">Can we see whether follow-up obligations are being met?</span>
+          </label>
+          <label class="demo-question-card">
+            <input type="checkbox" name="demo-use-case" value="UC-15" data-question="Can the organisation intervene before formal escalation?" />
+            <span class="demo-question-meta"><strong>UC-15</strong><em>Proactive remediation</em></span>
+            <span class="demo-question-text">Can the organisation intervene before formal escalation?</span>
+          </label>
         </div>
-        <p style="margin-top:24px;font-size:15px;font-weight:600;color:var(--ink);line-height:1.6;max-width:760px;">PulseMeasurement is a formal procedure. A weekly mechanism — open to every employee, structured by an AI coach, logged in a case system, assigned to an owner, tracked to a timeline, and returned to the person who raised it. Not a cultural ask. A mechanism that works.</p>
-      </div>
-
-      <div style="margin-top:32px;">
-        <a class="button teal" href="mailto:demo@pulsemeasurement.com" style="display:inline-block;padding:14px 32px;background:var(--teal);color:#fff;border-radius:6px;font-size:15px;font-weight:600;text-decoration:none;letter-spacing:.01em;">Request a demo</a>
+        <div class="demo-actions">
+          <button class="button teal" type="button" id="launch-demo-question">Launch guided demo</button>
+          <button class="button" type="button" id="clear-demo-questions">Clear</button>
+          <a class="button" href="mailto:demo@pulsemeasurement.com">Request a live walkthrough</a>
+          <span class="demo-selected" id="demo-selected-count">Select a question to launch the guide.</span>
+        </div>
       </div>
     </div>
+    <script>
+      (function () {
+        const picker = document.querySelector('.demo-picker');
+        if (!picker) return;
+        const checkboxes = Array.from(picker.querySelectorAll('input[name="demo-use-case"]'));
+        const launch = document.getElementById('launch-demo-question');
+        const clear = document.getElementById('clear-demo-questions');
+        const selected = document.getElementById('demo-selected-count');
+        const baseUrl = picker.dataset.demoAppUrl || 'https://beta.pulsemeasurement.com/today';
+
+        function checkedItems() {
+          return checkboxes.filter((box) => box.checked);
+        }
+
+        function updateSelectedText() {
+          const items = checkedItems();
+          selected.textContent = items.length === 0
+            ? 'Select a question to launch the guide.'
+            : items.length === 1
+              ? items[0].value + ' selected.'
+              : items.length + ' questions selected. The demo will start with ' + items[0].value + '.';
+        }
+
+        checkboxes.forEach((box) => box.addEventListener('change', updateSelectedText));
+        clear.addEventListener('click', () => {
+          checkboxes.forEach((box) => { box.checked = false; });
+          updateSelectedText();
+        });
+        launch.addEventListener('click', () => {
+          const items = checkedItems();
+          if (items.length === 0) {
+            checkboxes[0].focus();
+            return;
+          }
+          const url = new URL(baseUrl);
+          url.searchParams.set('useCase', items[0].value);
+          url.searchParams.set('source', 'website');
+          if (items.length > 1) url.searchParams.set('queue', items.map((item) => item.value).join(','));
+          window.location.href = url.toString();
+        });
+        updateSelectedText();
+      })();
+    </script>
   </section>
   <footer style="background:var(--navy);color:rgba(255,255,255,0.6);padding:48px 0;">
     <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;">
