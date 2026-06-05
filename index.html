@@ -86,6 +86,52 @@
     ]
   }
   </script>
+  <script>
+    window.pmRunWhenIdle = function (task) {
+      var schedule = function () {
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(task, { timeout: 1600 });
+        } else {
+          window.setTimeout(task, 250);
+        }
+      };
+
+      if (document.readyState === 'complete') {
+        schedule();
+      } else {
+        window.addEventListener('load', schedule, { once: true });
+      }
+    };
+    window.pmRunWhenVisible = function (selector, task) {
+      var target = document.querySelector(selector);
+      if (!target) return;
+
+      var run = function () {
+        if (run.done) return;
+        run.done = true;
+        window.pmRunWhenIdle(task);
+      };
+
+      if (window.location.hash && target.contains(document.getElementById(window.location.hash.slice(1)))) {
+        run();
+        return;
+      }
+
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          if (entries.some(function (entry) { return entry.isIntersecting; })) {
+            observer.disconnect();
+            run();
+          }
+        }, { rootMargin: '600px 0px' });
+        observer.observe(target);
+      } else {
+        window.addEventListener('load', function () {
+          window.setTimeout(run, 1800);
+        }, { once: true });
+      }
+    };
+  </script>
   <style>
     :root {
       --ink: #13211f;
@@ -613,7 +659,7 @@
         </div>
 
         <script>
-        (function(){
+        pmRunWhenVisible('#technology', function(){
           var L=[
             {num:'Level 1',label:'Post level',sub:'Single signal journey',color:'#1D9E75',stages:[
               {label:'Employee writes',sub:'Signal origin',color:'#1D9E75',bg:'#E1F5EE',chips:[{l:'Signal origin',c:'#E1F5EE',tc:'#0F6E56'}],desc:'Once a week the employee answers: what would you like your colleagues and managers to know about your contribution last week? The AI conversation coach helps them find the words — not to direct the answer, but to help them say what they mean.',insight:'The signal that arrives is offered, not extracted. That distinction is the whole answer to the surveillance question.',ucs:[{c:'#1D9E75',n:'Cadence compliance',q:'Is the team sharing honestly and consistently?'},{c:'#1D9E75',n:'Signal quality for small teams',q:'How do we keep analytics honest when the group is small?'}]},
@@ -777,7 +823,7 @@
             document.body.style.overflow='hidden';
           }
 
-        })();
+        });
         </script>
 
         <div class="pm3-modal-wrap" id="pm3-modal-wrap">
@@ -1187,6 +1233,7 @@
   </div>
 
 <script>
+pmRunWhenVisible('#value-proposition', function () {
 const PILLARS = [
   {
     color: '#0d9488',
@@ -1649,6 +1696,7 @@ function selectPillar(i) {
   // Scroll to detail
   document.querySelector('.detail-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+});
 </script>
   </section>
 
