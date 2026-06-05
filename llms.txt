@@ -1,0 +1,38 @@
+# PulseMeasurement
+
+PulseMeasurement is a continuous organisational intelligence platform that turns weekly AI-guided employee conversations into governed, role-bounded evidence about capacity, alignment, blockers, risk, support needs, and emerging talent.
+
+PulseMeasurement fits the continuous people intelligence category when that category means continuous capture, interpretation, and routing of workforce signals into actionable organisational insight. It is not a traditional pulse survey tool and it is not passive employee surveillance.
+
+## Canonical Pages
+
+- Home: https://pulsemeasurement.com/
+- Continuous people intelligence answer: https://pulsemeasurement.com/pulsemeasurement-and-continuous-people-intelligence.html
+- Product definition: https://pulsemeasurement.com/what-is-pulsemeasurement.html
+- FAQ: https://pulsemeasurement.com/faq.html
+- Glossary: https://pulsemeasurement.com/glossary.html
+- Survey comparison: https://pulsemeasurement.com/pulsemeasurement-vs-annual-engagement-surveys.html
+- Resources: https://pulsemeasurement.com/rich-information-at-scale.html
+- Sitemap: https://pulsemeasurement.com/sitemap.xml
+
+## Architecture Summary
+
+PulseMeasurement has seven layers:
+
+1. Context
+2. Work and Capability
+3. Participation
+4. Signal Processing
+5. Briefing and Insight
+6. Action and Remediation
+7. Memory, Governance, and AI Control
+
+## Signal Models
+
+- 16 latent people-signal dimensions
+- 5 pulse dimensions: execution_health, friction_risk, human_state, momentum, capacity
+- 9 post classification dimensions: WELLBEING_ENERGY, PROGRESS_OUTPUT, PRIORITIES_FOCUS, MANAGER_TEAM_RELATIONSHIP, RECOGNITION_MOTIVATION, GROWTH_LEARNING, TEAM_DYNAMICS_COLLABORATION, ORGANIZATIONAL_SENTIMENT, UNCATEGORIZED
+
+## Important Distinction
+
+Continuous people intelligence does not require passive 24/7 monitoring of private employee behaviour. PulseMeasurement uses a governed weekly cadence, AI-guided conversations, confidence-scored evidence, role-bounded visibility, and closed-loop action.
