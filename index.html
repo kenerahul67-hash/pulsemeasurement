@@ -1025,6 +1025,16 @@
     #value-proposition .pillar-nav-btn {font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:3px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);cursor:pointer;background:transparent}
     #value-proposition .pillar-nav-btn:hover {background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
     #value-proposition .pillar-nav-btn.active {color:white;border-color:currentColor}
+    #value-proposition .pillar-callout {margin-top:24px;max-width:760px;border:1px solid rgba(255,255,255,.12);border-left:3px solid var(--teal);border-radius:10px;background:rgba(255,255,255,.06);padding:20px 22px;color:white;box-shadow:0 18px 50px rgba(0,0,0,.18)}
+    #value-proposition .pillar-callout-kicker {font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(141,227,216,.72);margin-bottom:8px}
+    #value-proposition .pillar-callout-title {font-size:20px;font-weight:700;line-height:1.25;margin-bottom:8px}
+    #value-proposition .pillar-callout-value {font-size:14px;line-height:1.7;color:rgba(255,255,255,.76);margin-bottom:14px}
+    #value-proposition .pillar-callout-grid {display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    #value-proposition .pillar-callout-label {font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.46);margin-bottom:7px}
+    #value-proposition .pillar-callout-list {display:flex;flex-wrap:wrap;gap:6px}
+    #value-proposition .pillar-callout-pill {display:inline-flex;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);padding:5px 9px;font-size:11px;color:rgba(255,255,255,.78)}
+    #value-proposition .pillar-callout-link {display:inline-flex;margin-top:14px;font-size:12px;font-weight:700;color:#8de3d8;text-decoration:none}
+    #value-proposition .pillar-callout-link:hover {text-decoration:underline;text-underline-offset:3px}
 
     /* PILLARS GRID */
     #value-proposition .pillars-section {padding:0 48px 80px;background:var(--navy)}
@@ -1106,6 +1116,7 @@
     @media(max-width:700px){
       #value-proposition .topbar,.hero,.pillars-section,.detail-section,.summary-section,.cta-section {padding-left:24px;padding-right:24px}
       #value-proposition .pillars-grid {grid-template-columns:1fr}
+      #value-proposition .pillar-callout-grid {grid-template-columns:1fr}
     }
     </style>
     <!-- HERO -->
@@ -1128,6 +1139,7 @@
         <button class="pillar-nav-btn" data-pillar="10">11 Teams &amp; Email Integration</button>
         <button class="pillar-nav-btn" data-pillar="11">12 Workforce Intelligence</button>
       </div>
+      <div class="pillar-callout" id="pillar-callout" aria-live="polite"></div>
     </div>
   </div>
 
@@ -1570,7 +1582,7 @@ PILLARS.forEach((p, i) => {
     <div class="pillar-bottom">
       <div class="pillar-value">${p.value}</div>
     </div>`;
-  col.addEventListener('click', () => selectPillar(i));
+  col.addEventListener('click', () => selectPillar(i, { scroll: true }));
   grid.appendChild(col);
 });
 
@@ -1691,7 +1703,8 @@ PILLARS.forEach((p, i) => {
   tbody.appendChild(tr);
 });
 
-function selectPillar(i) {
+function selectPillar(i, options = {}) {
+  const p = PILLARS[i];
   // Update grid
   document.querySelectorAll('.pillar-col').forEach((col, j) => col.classList.toggle('active', j === i));
   // Update detail panels
@@ -1702,9 +1715,43 @@ function selectPillar(i) {
     btn.style.borderColor = j === i ? PILLARS[i].color : 'rgba(255,255,255,.12)';
     btn.style.color = j === i ? 'white' : 'rgba(255,255,255,.55)';
   });
-  // Scroll to detail
-  document.querySelector('.detail-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  updatePillarCallout(i);
+  if (options.scroll) {
+    document.querySelector('.detail-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
+
+function updatePillarCallout(i) {
+  const p = PILLARS[i];
+  const callout = document.getElementById('pillar-callout');
+  if (!callout || !p) return;
+  const visibleUses = (p.pointers || []).slice(0, 4);
+  const buyers = (p.buyers || []).slice(0, 3);
+  callout.style.borderLeftColor = p.color;
+  callout.innerHTML = `
+    <div class="pillar-callout-kicker">${p.num} / ${p.name}</div>
+    <div class="pillar-callout-title">${p.name}</div>
+    <div class="pillar-callout-value">${p.value}</div>
+    <div class="pillar-callout-grid">
+      <div>
+        <div class="pillar-callout-label">Visible use cases</div>
+        <div class="pillar-callout-list">${visibleUses.map(item => `<span class="pillar-callout-pill">${item.label}</span>`).join('')}</div>
+      </div>
+      <div>
+        <div class="pillar-callout-label">Who this serves</div>
+        <div class="pillar-callout-list">${buyers.map(item => `<span class="pillar-callout-pill">${item.role}</span>`).join('')}</div>
+      </div>
+    </div>
+    <a class="pillar-callout-link" href="#value-detail">View full pillar detail below</a>
+  `;
+}
+
+document.querySelectorAll('.pillar-nav-btn').forEach((btn) => {
+  btn.addEventListener('click', () => selectPillar(Number(btn.dataset.pillar || 0), { scroll: false }));
+});
+
+document.querySelector('.detail-section').id = 'value-detail';
+updatePillarCallout(0);
 });
 </script>
   </section>

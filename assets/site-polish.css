@@ -397,6 +397,35 @@ footer a:hover,
     white-space: normal;
   }
 
+  #value-proposition .hero-inner,
+  #value-proposition .hero h2,
+  #value-proposition .hero-lead,
+  #value-proposition .pillar-nav,
+  #value-proposition .pillar-callout {
+    width: 300px !important;
+    max-width: 300px !important;
+  }
+
+  #value-proposition .hero-inner {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  #value-proposition .hero {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  #value-proposition .hero h2 {
+    font-size: 38px !important;
+    line-height: 1.08 !important;
+  }
+
+  #value-proposition .pillar-nav-btn {
+    max-width: 100%;
+    white-space: normal;
+  }
+
   .cta-row .button,
   .demo-actions .button {
     width: 100%;
