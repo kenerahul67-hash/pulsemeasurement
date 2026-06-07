@@ -434,6 +434,7 @@
       margin-left: 8px;
     }
   </style>
+  <link rel="stylesheet" href="assets/site-polish.css"/>
 </head>
 <body>
   <div class="beta-banner" role="banner">
@@ -659,7 +660,7 @@
         </div>
 
         <script>
-        pmRunWhenVisible('#technology', function(){
+        pmRunWhenVisible('#product-explorer', function(){
           var L=[
             {num:'Level 1',label:'Post level',sub:'Single signal journey',color:'#1D9E75',stages:[
               {label:'Employee writes',sub:'Signal origin',color:'#1D9E75',bg:'#E1F5EE',chips:[{l:'Signal origin',c:'#E1F5EE',tc:'#0F6E56'}],desc:'Once a week the employee answers: what would you like your colleagues and managers to know about your contribution last week? The AI conversation coach helps them find the words — not to direct the answer, but to help them say what they mean.',insight:'The signal that arrives is offered, not extracted. That distinction is the whole answer to the surveillance question.',ucs:[{c:'#1D9E75',n:'Cadence compliance',q:'Is the team sharing honestly and consistently?'},{c:'#1D9E75',n:'Signal quality for small teams',q:'How do we keep analytics honest when the group is small?'}]},
@@ -1090,11 +1091,11 @@
     #value-proposition .btn-teal {display:inline-block;padding:14px 32px;background:var(--teal);color:white;border-radius:8px;font-size:14px;font-weight:600;letter-spacing:.01em;text-decoration:none;transition:background .15s}
     #value-proposition .btn-teal:hover {background:#0b7c72}
 
-    @media(max-width:1000px){ {
+    @media(max-width:1000px){
       #value-proposition .pillars-grid {grid-template-columns:1fr 1fr;grid-template-rows:auto}
       #value-proposition .detail-panel.active {grid-template-columns:1fr}
     }
-    @media(max-width:700px){ {
+    @media(max-width:700px){
       #value-proposition .topbar,.hero,.pillars-section,.detail-section,.summary-section,.cta-section {padding-left:24px;padding-right:24px}
       #value-proposition .pillars-grid {grid-template-columns:1fr}
     }
