@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Point of View | PulseMeasurement</title>
+  <meta
+    name="description"
+    content="PulseMeasurement point-of-view essays on continuous people intelligence, structural feedback loops, ethical AI architecture, latent disengagement, and organisational memory."
+  />
+  <link rel="canonical" href="https://pulsemeasurement.com/pov.html"/>
+  <style>
+    :root {
+      --ink: #13211f;
+      --muted: #334742;
+      --navy: #0f1e3c;
+      --teal: #0d9488;
+      --sky: #0ea5e9;
+      --amber: #f59e0b;
+      --paper: #f7f9f7;
+      --line: #d7e2dc;
+      --soft: #eef5f2;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "DM Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(247, 249, 247, 0.95);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.65) inset;
+    }
+    .nav {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 800; color: var(--navy); }
+    .mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--teal);
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(13, 148, 136, 0.18);
+    }
+    .beta-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(13,148,136,0.12);
+      border: 1px solid rgba(13,148,136,0.35);
+      color: var(--teal);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-left: 8px;
+    }
+    .links { display: flex; gap: 22px; color: var(--muted); font-size: 14px; font-weight: 700; }
+    .links a:hover { color: var(--teal); }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 18px;
+      border-radius: 8px;
+      border: 1px solid #9fb4ad;
+      font-size: 14px;
+      font-weight: 800;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      white-space: nowrap;
+    }
+    .button.primary { background: var(--navy); border-color: var(--navy); color: white; }
+    .button.teal { background: var(--teal); border-color: var(--teal); color: white; }
+    .button:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(15,30,60,0.12); }
+    .eyebrow {
+      display: inline-flex;
+      border: 1px solid #a9c9c3;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 999px;
+      padding: 8px 14px;
+      color: #0d6e65;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      box-shadow: 0 10px 30px rgba(15, 30, 60, 0.04);
+    }
+    h1, h2, h3 { margin: 0; line-height: 1.18; letter-spacing: 0; }
+    h1 { margin-top: 24px; font-size: clamp(38px, 5.5vw, 68px); max-width: 860px; }
+    h2 { font-size: clamp(28px, 3.8vw, 42px); }
+    h3 { font-size: 20px; line-height: 1.3; }
+    .lead { margin-top: 20px; max-width: 760px; color: var(--muted); font-size: 17px; line-height: 1.75; }
+    .hero {
+      border-bottom: 1px solid var(--line);
+      padding: clamp(72px, 9vw, 116px) 0 clamp(48px, 7vw, 80px);
+      background:
+        linear-gradient(140deg, rgba(255,255,255,0.6), rgba(255,255,255,0.08) 44%),
+        radial-gradient(circle at 8% 18%, rgba(13,148,136,0.16), transparent 30%),
+        radial-gradient(circle at 78% 12%, rgba(245,158,11,0.13), transparent 24%),
+        linear-gradient(120deg, rgba(14,165,233,0.08), transparent 48%);
+    }
+    .intro-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+      gap: clamp(28px, 5vw, 64px);
+      align-items: end;
+    }
+    .note {
+      border: 1px solid #c7d7d1;
+      background: rgba(255,255,255,0.74);
+      border-radius: 8px;
+      padding: 22px;
+      box-shadow: 0 18px 55px rgba(15,30,60,0.08);
+    }
+    .note strong { display: block; color: var(--navy); font-size: 18px; line-height: 1.35; }
+    .note p { color: var(--muted); margin: 12px 0 0; }
+    .block {
+      padding-top: clamp(56px, 7vw, 88px);
+      padding-bottom: clamp(56px, 7vw, 88px);
+      border-bottom: 1px solid var(--line);
+    }
+    .pov-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-top: 32px;
+    }
+    .pov-card {
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 8px;
+      padding: 22px;
+      box-shadow: 0 10px 34px rgba(15,30,60,0.045);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .pov-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--teal);
+      box-shadow: 0 18px 55px rgba(15,30,60,0.08);
+    }
+    .stripe { display: block; height: 12px; border-radius: 999px; margin-bottom: 18px; }
+    .meta {
+      display: inline-flex;
+      width: fit-content;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #e7f6f3;
+      color: #0b5e56;
+      font: 700 12px/1 monospace;
+      margin-bottom: 14px;
+    }
+    .small { color: var(--muted); font-size: 14px; line-height: 1.7; }
+    .download {
+      margin-top: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--teal);
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .download::after { content: "PDF"; font: 700 11px/1 monospace; color: var(--muted); }
+    .cta {
+      background: var(--navy);
+      color: white;
+    }
+    .cta .lead { color: rgba(255,255,255,0.72); }
+    footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    @media (max-width: 900px) {
+      .links { display: none; }
+      .intro-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      .wrap { padding-left: 18px; padding-right: 18px; }
+      .brand .beta-badge,
+      .nav > div > span[style],
+      .actions { display: none !important; }
+      h1 { font-size: 31px; line-height: 1.24; }
+      .pov-card { min-height: auto; }
+    }
+  </style>
+  <link rel="stylesheet" href="assets/site-polish.css?v=20260607-product-explorer"/>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap nav">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <a class="brand" href="index.html#home"><span class="mark">PM</span><span>PulseMeasurement</span><span class="beta-badge">Beta</span></a>
+        <span style="font-size:11px;color:var(--muted);font-style:italic;padding-left:4px;">We tell you what is growing before it blooms - and what is breaking before it fails.</span>
+      </div>
+      <nav class="links" aria-label="Website sections">
+        <a href="index.html#functionality">Functionality</a>
+        <a href="index.html#technology">Technology</a>
+        <a href="index.html#use-cases">Use Cases</a>
+        <a href="index.html#value-proposition">Value</a>
+        <a href="index.html#richness">Richness</a>
+        <a href="what-is-pulsemeasurement.html">What is it?</a>
+        <a href="rich-information-at-scale.html">Resources</a>
+        <a href="pov.html">PoV</a>
+        <a href="index.html#demo">Demo</a>
+      </nav>
+      <div class="actions"><a class="button primary" href="index.html#demo">Book demo</a></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap intro-grid">
+        <div>
+          <span class="eyebrow">Point of view</span>
+          <h1>Essays on continuous people intelligence and the architecture of trust.</h1>
+          <p class="lead">These short PulseMeasurement point-of-view papers set out the operating ideas behind the platform: why reactive people data fails, how latent signals become visible, and what ethical AI architecture requires when organisations work with human evidence.</p>
+        </div>
+        <aside class="note">
+          <strong>For leaders, boards, HR teams, and builders of people systems.</strong>
+          <p>Each paper is available as a downloadable PDF for sharing, review, and internal discussion.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wrap">
+        <span class="eyebrow">Library</span>
+        <h2 style="margin-top:20px;">Ten papers on what people intelligence must become.</h2>
+        <p class="lead">The series moves from failure modes in current measurement to the structural principles PulseMeasurement is built around: memory, translation, pattern extraction, long-tail talent, feedback loops, and ethical AI control.</p>
+
+        <div class="pov-grid" aria-label="PulseMeasurement point of view papers">
+          <a class="pov-card" href="assets/pov/pm-pov-01-reactive-data-traps.pdf">
+            <div>
+              <span class="stripe" style="background:var(--teal);"></span>
+              <span class="meta">POV 01</span>
+              <h3>Reactive Data Traps</h3>
+              <p class="small">Why retrospective people data leaves leaders reacting to problems after the evidence has already gone cold.</p>
+            </div>
+            <span class="download">Open paper</span>
+          </a>
+          <a class="pov-card" href="assets/pov/pm-pov-02-latent-disengagement.pdf">
+            <div>
+              <span class="stripe" style="background:var(--sky);"></span>
+              <span class="meta">POV 02</span>
+              <h3>Latent Disengagement</h3>
+              <p class="small">How disengagement forms before it is declared, measured, or visible in conventional engagement reporting.</p>
+            </div>
+            <span class="download">Open paper</span>
+          </a>
+          <a class="pov-card" href="assets/pov/pm-pov-03-fatal-flaws-feedback.pdf">
+            <div>
+              <span class="stripe" style="background:var(--amber);"></span>
+              <span class="meta">POV 03</span>
+              <h3>Fatal Flaws in Feedback</h3>
+              <p class="small">The recurring design failures that make employee feedback feel performative, risky, or consequence-free.</p>
+            </div>
+            <span class="download">Open paper</span>
+          </a>
+          <a class="pov-card" href="assets/pov/pm-pov-04-tending-framework.pdf">
+            <div>
+              <span class="stripe" style="background:var(--teal);"></span>
+              <span class="meta">POV 04</span>
+              <h3>The Tending Framework</h3>
+              <p class="small">A leadership model for noticing, interpreting, and acting before people systems drift into failure.</p>
+            </div>
+            <span class="download">Open paper</span>
+          </a>
+          <a class="pov-card" href="assets/pov/pm-pov-05-institutional-memory.pdf">
+            <div>
+              <span class="stripe" style="background:var(--sky);"></span>
+              <span class="meta">POV 05</span>
+              <h3>Institutional Memory</h3>
+              <p class="small">Why organisations keep relearning the same lessons, and how people intelligence should compound over time.</p>
+            </div>
+            <span class="download">Open paper</span>
+          </a>
+          <a class="pov-card" href="assets/pov/pm-pov-06-translation-layer.pdf">
+            <div>
+              <span class="stripe" style="background:var(--amber);"></span>
+              <span class="meta">POV 06</span>
+              <h3>The Translation Layer</h3>
+              <p class="small">How raw employee signal becomes role-appropriate evidence for managers, HR, executives, and boards.</p>
+            </div>
+            <span class="download">Open paper</span>
+          </a>
+          <a class="pov-card" href="assets/pov/pm-pov-07-long-tail-talent.pdf">
+            <div>
+              <span class="stripe" style="background:var(--teal);"></span>
+              <span class="meta">POV 07</span>
+              <h3>Long-Tail Talent</h3>
+              <p class="small">The hidden capability, emerging leadership, and informal expertise that static talent systems fail to see.</p>
+            </div>
+            <span class="download">Open paper</span>
+          </a>
+          <a class="pov-card" href="assets/pov/pm-pov-08-pattern-extraction.pdf">
+            <div>
+              <span class="stripe" style="background:var(--sky);"></span>
+              <span class="meta">POV 08</span>
+              <h3>Pattern Extraction</h3>
+              <p class="small">Why the value of people signal comes from repeated patterns, confidence, context, and accountable interpretation.</p>
+            </div>
+            <span class="download">Open paper</span>
+          </a>
+          <a class="pov-card" href="assets/pov/pm-pov-09-structural-feedback-loops.pdf">
+            <div>
+              <span class="stripe" style="background:var(--amber);"></span>
+              <span class="meta">POV 09</span>
+              <h3>Structural Feedback Loops</h3>
+              <p class="small">How trust changes when feedback has an owner, a timeline, a record, and a visible return to the person who raised it.</p>
+            </div>
+            <span class="download">Open paper</span>
+          </a>
+          <a class="pov-card" href="assets/pov/pm-pov-10-ethical-ai-architecture.pdf">
+            <div>
+              <span class="stripe" style="background:var(--teal);"></span>
+              <span class="meta">POV 10</span>
+              <h3>Ethical AI Architecture</h3>
+              <p class="small">The control, visibility, and human accountability principles required when AI works with sensitive people evidence.</p>
+            </div>
+            <span class="download">Open paper</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="block cta">
+      <div class="wrap">
+        <span class="eyebrow">From paper to platform</span>
+        <h2 style="margin-top:20px;">PulseMeasurement turns these principles into an operating system for live people signal.</h2>
+        <p class="lead">The PoV series explains the why. The product shows the how: governed weekly participation, signal processing, manager briefings, action ownership, and organisational memory.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;">
+          <a class="button teal" href="index.html#demo">Book a tailored demo</a>
+          <a class="button" href="index.html#functionality" style="background:white;">Explore functionality</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="background:var(--navy);color:rgba(255,255,255,0.6);padding:48px 0;">
+    <div class="wrap" style="display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between;">
+      <div>
+        <a class="brand" href="index.html#home" style="color:white;"><span class="mark">PM</span><span>PulseMeasurement</span><span class="beta-badge">Beta</span></a>
+        <p style="margin:12px 0 0;font-size:13px;">Continuous people intelligence for modern organisations.</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:14px;">
+        <a href="index.html#functionality" style="color:rgba(255,255,255,0.6);">How it works</a>
+        <a href="index.html#technology" style="color:rgba(255,255,255,0.6);">Trust &amp; security</a>
+        <a href="index.html#use-cases" style="color:rgba(255,255,255,0.6);">Use cases</a>
+        <a href="what-is-pulsemeasurement.html" style="color:rgba(255,255,255,0.6);">What is it?</a>
+        <a href="rich-information-at-scale.html" style="color:rgba(255,255,255,0.6);">Resources</a>
+        <a href="pov.html" style="color:rgba(255,255,255,0.6);">PoV</a>
+        <a href="index.html#demo" style="color:rgba(255,255,255,0.6);">Book a demo</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
