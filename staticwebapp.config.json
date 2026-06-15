@@ -11,7 +11,7 @@
   },
   "globalHeaders": {
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
-    "Content-Security-Policy": "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com https://stats.g.doubleclick.net; font-src 'self'; connect-src 'self' https://beta.pulsemeasurement.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net; form-action 'self' mailto: https://beta.pulsemeasurement.com; frame-ancestors 'self'; upgrade-insecure-requests",
+    "Content-Security-Policy": "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.clarity.ms; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com https://stats.g.doubleclick.net https://www.clarity.ms https://*.clarity.ms; font-src 'self'; connect-src 'self' https://beta.pulsemeasurement.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.clarity.ms https://*.clarity.ms; form-action 'self' mailto: https://beta.pulsemeasurement.com; frame-ancestors 'self'; upgrade-insecure-requests",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "SAMEORIGIN",
     "X-XSS-Protection": "1; mode=block",
